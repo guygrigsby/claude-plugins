@@ -1,0 +1,9 @@
+{
+  "name": "sno",
+  "version": "0.1.0",
+  "description": "Lightweight spec-driven development. Learn, plan, build, check, ship.",
+  "author": {
+    "name": "Guy Grigsby"
+  },
+  "license": "MIT"
+}
