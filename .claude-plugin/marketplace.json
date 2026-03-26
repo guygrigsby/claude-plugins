@@ -1,0 +1,18 @@
+{
+  "id": "guygrigsby-sno",
+  "name": "sno",
+  "description": "Lightweight spec-driven development plugins",
+  "plugins": [
+    {
+      "id": "sno",
+      "name": "sno",
+      "description": "Lightweight spec-driven development. Learn, plan, build, check, ship.",
+      "version": "0.1.0",
+      "source": {
+        "source": "github",
+        "repo": "guygrigsby/sno",
+        "path": "."
+      }
+    }
+  ]
+}
