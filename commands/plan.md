@@ -15,18 +15,33 @@ You are in the **plan** phase of sno. Your goal is to turn the spec into an acti
 
 2. **Spawn the `planner` agent** (Opus) to analyze the spec, research outputs, and codebase. It produces the task plan with dependency tracking and wave assignments.
 
-3. **Write the agent's output** to `.sno/plan.md`:
+3. **Write the agent's output** to `.sno/plan.md` using the structured task format:
 
 ```markdown
 # Plan: <title from spec>
 
 ## Tasks
-- [ ] 1. <Task description> — <files involved> (depends: none)
-- [ ] 2. <Task description> — <files involved> (depends: none)
-- [ ] 3. <Task description> — <files involved> (depends: 1)
-- [ ] 4. <Task description> — <files involved> (depends: 1, 2, 3)
-...
+
+### 1. <Task description> (depends: none)
+- **status:** [ ]
+- **files:** `path/to/file.ts`, `path/to/other.ts`
+- **verify:** <How to confirm this task is done — a command to run, a check to perform, or a condition to inspect>
+- **done:** <One-line success criterion>
+
+### 2. <Task description> (depends: none)
+- **status:** [ ]
+- **files:** `path/to/file.ts`
+- **verify:** <verification step>
+- **done:** <success criterion>
+
+### 3. <Task description> (depends: 1, 2)
+- **status:** [ ]
+- **files:** `path/to/file.ts`
+- **verify:** <verification step>
+- **done:** <success criterion>
 ```
+
+Each task must have all five fields: status, files, verify, done, and dependencies in the heading.
 
 4. Show the plan to the user. Include a summary of what can run in parallel:
    - "**Wave 1** (parallel): tasks 1, 2"

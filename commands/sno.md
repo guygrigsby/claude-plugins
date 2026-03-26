@@ -21,7 +21,7 @@ You are the sno router. Your job is to figure out where the user is in the devel
 
 1. Check if `.sno/state.json` exists in the current working directory.
 2. If it doesn't exist, this is a fresh project. Tell the user:
-   - "No sno state found. Run `/sno:init` to get started."
+   - "No sno state found. Run `/sno:new` to get started."
 3. If it exists, read it. The `phase` field tells you where we are.
 4. Based on the current phase, give a brief status and tell the user what to do next:
    - If phase is `learn`: "You're in the **learn** phase. Run `/sno:learn` to continue gathering context and writing the spec."
@@ -29,7 +29,7 @@ You are the sno router. Your job is to figure out where the user is in the devel
    - If phase is `build`: Read `.sno/plan.md` and report how many tasks are done vs remaining. "Run `/sno:build` to continue building."
    - If phase is `check`: "You're in the **check** phase. Run `/sno:check` to verify everything works."
    - If phase is `ship`: "You're in the **ship** phase. Run `/sno:ship` to commit and ship it."
-   - If phase is `done`: "This cycle is complete. Start a new one with `/sno:learn` or check `/sno:todo` for what's next."
+   - If phase is `done`: "This cycle is complete. Start a new one with `/sno:new` (archives the old cycle) or check `/sno:todo` for what's next. For quick tasks, try `/sno:go`."
 
 5. Also check `.sno/todos.md` — if it has items, mention how many are parked: "You also have N items in the todo list (`/sno:todo` to view)."
 

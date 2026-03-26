@@ -12,7 +12,7 @@ You are in the **learn** phase of sno. Your goal is deep understanding before wr
 ## What to do
 
 ### Step 0: Check state
-If `.sno/state.json` doesn't exist, tell the user: "Run `/sno:init` first." and stop.
+If `.sno/state.json` doesn't exist, tell the user: "Run `/sno:new` first." and stop.
 
 If `.sno/spec.md` already exists, read it and ask the user if they want to refine it or move on to `/sno:plan`.
 

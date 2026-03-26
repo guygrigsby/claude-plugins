@@ -7,13 +7,14 @@ A lightweight Claude Code plugin for spec-driven development.
 `learn → plan → build → check → ship`
 
 - `/sno` — routes to the next step
-- `/sno:init` — initialize sno in a project
+- `/sno:new` — start a new cycle (pulls latest, creates branch, archives previous cycle if done)
 - `/sno:learn` — gather context, write a spec
-- `/sno:plan` — break spec into tasks
-- `/sno:build` — execute tasks one at a time
-- `/sno:check` — verify work against spec
-- `/sno:ship` — commit and ship
+- `/sno:plan` — break spec into tasks (structured format with verify/done per task)
+- `/sno:build` — execute tasks in parallel waves (commits per wave)
+- `/sno:check` — verify work against spec (auto-diagnoses failures)
+- `/sno:ship` — commit remaining changes and ship
 - `/sno:todo` — parking lot for later
+- `/sno:go` — quick mode for small tasks, skip the full ceremony
 
 ## Design Principles
 

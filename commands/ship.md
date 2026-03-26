@@ -13,11 +13,12 @@ You are in the **ship** phase of sno. Your goal is to ship the work.
 
 1. Read `.sno/spec.md` for context on what was built.
 
-2. **Stage and commit** the changes:
+2. **Stage and commit** any remaining changes:
    - Review what's changed with `git status` and `git diff`.
+   - Note: build waves may have already committed most changes. Only stage and commit what's left (e.g., README updates from check phase, any manual fixes).
    - Stage the relevant files (not `.sno/` — that's local state).
-   - Write a clear commit message based on the spec's goal.
-   - Ask the user before committing.
+   - If there are unstaged changes, write a clear commit message based on the spec's goal. Ask the user before committing.
+   - If nothing to commit (waves already covered everything), skip to step 3.
 
 3. **Ask about PR**:
    - If the user is on a feature branch, offer to create a PR.

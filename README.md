@@ -16,12 +16,13 @@ init → learn → plan → build → check → ship
 
 | Command | What it does |
 |---------|-------------|
-| `/sno:init` | Initialize sno in your project |
+| `/sno:new` | Start a new cycle. Pulls latest, creates a branch, archives previous cycle. |
 | `/sno:learn` | Understand the problem. Parallel Opus agents research the domain, data model, and codebase. Then asks you targeted questions. Produces a spec. |
-| `/sno:plan` | Break the spec into ordered tasks |
-| `/sno:build` | Execute tasks in parallel waves. Independent tasks run as concurrent agents; dependent tasks wait. |
-| `/sno:check` | Verify work against the spec |
-| `/sno:ship` | Commit and ship |
+| `/sno:plan` | Break the spec into structured tasks with verify/done criteria per task |
+| `/sno:build` | Execute tasks in parallel waves with per-wave commits |
+| `/sno:check` | Verify work against the spec. Auto-diagnoses failures with debug agents. |
+| `/sno:ship` | Commit remaining changes and ship |
+| `/sno:go` | Quick mode — skip the ceremony for small tasks |
 | `/sno:todo` | Parking lot for later |
 | `/sno` | Where am I? Routes to the next step. |
 
@@ -57,11 +58,25 @@ The build phase parses task dependencies into waves and executes each wave in pa
   Wave 3: [task E (depends: D)]     ─── waits for wave 2
 ```
 
-Each agent gets the task description, relevant spec sections, and file scope. Agents are told to implement exactly what the task says — nothing more. If an agent hits a problem, the wave stops and you decide what to do next.
+Each agent gets the task description, relevant spec sections, file scope, and the task's verification step. Agents verify their own work before reporting success. Each completed wave is committed atomically.
+
+## Quick Mode
+
+For small tasks that don't need the full loop:
+
+```
+/sno:go add a --verbose flag to the CLI
+```
+
+No state, no spec, no plan file. Scout the code, make the change, verify it, done.
+
+## Cycle Archives
+
+When you `/sno:new` after a completed cycle, the previous cycle's spec, plan, and research are archived to `.sno/archive/<N>/`. The last 5 cycles are kept.
 
 ## State
 
-sno stores workflow state in `.sno/` in your project directory. It's gitignored automatically by `/sno:init`.
+sno stores workflow state in `.sno/` in your project directory. It's gitignored automatically by `/sno:new`.
 
 ## License
 

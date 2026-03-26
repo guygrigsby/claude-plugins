@@ -13,7 +13,7 @@ You are in the **build** phase of sno. Your goal is to execute the plan as fast 
 
 1. Read `.sno/plan.md`. If it doesn't exist, tell the user to run `/sno:plan` first.
 
-2. **Parse the dependency graph.** Group remaining unchecked tasks into waves:
+2. **Parse the dependency graph.** Tasks use the structured format — each task is a `### N. Title (depends: ...)` heading with `status`, `files`, `verify`, and `done` fields. Group remaining unchecked tasks (status `[ ]`) into waves:
    - **Wave 1**: all tasks with `(depends: none)` or whose dependencies are already complete `[x]`
    - **Wave 2**: tasks whose dependencies are all in wave 1
    - **Wave 3**: tasks whose dependencies are all in waves 1-2
@@ -28,6 +28,7 @@ You are in the **build** phase of sno. Your goal is to execute the plan as fast 
      - Clear instruction: only touch the files listed, implement exactly what the task says, nothing more.
    - Wait for all agents in the wave to complete.
    - **Mark all completed tasks** as `[x]` in `.sno/plan.md`.
+   - **Commit the wave.** Stage all files modified in this wave and commit with message: `sno: wave N — <brief summary of what the wave did>`. Do NOT include `.sno/` files.
    - Report what was done.
 
 4. **Move to next wave.** Repeat until all tasks are complete.
@@ -37,14 +38,16 @@ You are in the **build** phase of sno. Your goal is to execute the plan as fast 
 ## Parallel agent instructions
 
 When spawning a parallel build agent, give it this context:
-- The task description and number
-- The files it should touch (from the plan)
+- The task description, number, and `done` criterion
+- The files it should touch (from the task's `files` field)
+- The verification step (from the task's `verify` field)
 - The relevant spec sections
 - Existing code context (read the files it depends on so it has the types/interfaces)
 
 Tell each agent:
 - Only touch the files listed in your task.
 - Implement exactly what the task describes. Nothing more.
+- **Verify your work** using the task's `verify` field — run the specified check before reporting success.
 - Do not refactor, improve, or clean up adjacent code.
 - If something is blocked or wrong, return with a description of the problem instead of guessing.
 

@@ -30,10 +30,17 @@ You are in the **check** phase of sno. Your goal is to verify the work.
 
 5. If everything passes, update `.sno/state.json` phase to `ship`.
 
-6. If something fails, tell the user they can:
-   - Fix it manually
-   - Run `/sno:build` to address the gaps (update the plan with fix tasks first)
-   - Ship it anyway if the gap is acceptable
+6. If something fails, **auto-diagnose**:
+   - For each failing criterion, spawn a debug agent (via Agent tool) to investigate the root cause. Give it:
+     - The failing criterion
+     - The relevant code files
+     - Any test output or error messages
+   - The debug agent should return: what's wrong, why, and a concrete fix plan (specific files + changes).
+   - Present the diagnosis to the user with the fix plan.
+   - Offer options:
+     - Apply the fix plans now (add them as tasks to `.sno/plan.md` and re-run `/sno:build`)
+     - Fix it manually
+     - Ship it anyway if the gap is acceptable
 
 ## Rules
 - Be honest. Don't rubber-stamp. If something doesn't meet the spec, say so.
@@ -45,4 +52,4 @@ You are in the **check** phase of sno. Your goal is to verify the work.
 If `--auto` is set:
 - Run all checks and update the README without pausing.
 - If everything passes, immediately advance to the ship phase and continue.
-- If something fails, log the failures in `.sno/todos.md` and advance to ship anyway — don't block.
+- If something fails, run auto-diagnosis. If the fix is small (< 20 lines total), apply it directly. If larger, log the failures and fix plans in `.sno/todos.md` and advance to ship anyway — don't block.
