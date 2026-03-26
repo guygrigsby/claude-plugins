@@ -1,6 +1,10 @@
 ---
 name: check
 description: "Verify the work matches the spec. Run tests, review changes, check acceptance criteria."
+arguments:
+  - name: flags
+    description: "Optional flags. Use --auto to skip confirmations and continue through all phases."
+    required: false
 ---
 
 You are in the **check** phase of sno. Your goal is to verify the work.
@@ -15,13 +19,18 @@ You are in the **check** phase of sno. Your goal is to verify the work.
    - Run the build/lint if applicable.
    - Mark each criterion as met or not met.
 
-3. **Report results** to the user:
+3. **Check that the README is up to date.** Read `README.md` and compare it against the current spec and what was built:
+   - Do any commands, features, or behaviors described in the README no longer match reality?
+   - Does the work just completed add anything that should be reflected in the README?
+   - If the README needs updating, update it before moving on.
+
+4. **Report results** to the user:
    - List each criterion with pass/fail.
    - If something fails, explain what's wrong and suggest a fix.
 
-4. If everything passes, update `.sno/state.json` phase to `ship`.
+5. If everything passes, update `.sno/state.json` phase to `ship`.
 
-5. If something fails, tell the user they can:
+6. If something fails, tell the user they can:
    - Fix it manually
    - Run `/sno:build` to address the gaps (update the plan with fix tasks first)
    - Ship it anyway if the gap is acceptable
@@ -30,3 +39,10 @@ You are in the **check** phase of sno. Your goal is to verify the work.
 - Be honest. Don't rubber-stamp. If something doesn't meet the spec, say so.
 - But also be practical. If a criterion is 95% met and the gap is trivial, note it but don't block.
 - Don't add new requirements during check. If you notice something that should be improved, suggest adding it to `/sno:todo`.
+
+## --auto flag
+
+If `--auto` is set:
+- Run all checks and update the README without pausing.
+- If everything passes, immediately advance to the ship phase and continue.
+- If something fails, log the failures in `.sno/todos.md` and advance to ship anyway — don't block.

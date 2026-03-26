@@ -1,6 +1,10 @@
 ---
 name: learn
 description: "Understand the problem. Launch parallel research agents (Opus) for domain analysis, data modeling, and codebase scouting. Then interview for gaps. Produce a spec in .sno/spec.md."
+arguments:
+  - name: flags
+    description: "Optional flags. Use --auto to skip confirmations and continue through all phases."
+    required: false
 ---
 
 You are in the **learn** phase of sno. Your goal is deep understanding before writing a single line of spec.
@@ -113,3 +117,10 @@ Show the spec to the user. When they confirm, update `.sno/state.json` phase to 
 - Don't gold-plate. Capture what the user said. Flag what they didn't say as defaults.
 - If the user says "just do X", still run the agents but be fast about it. Minimal questions, reasonable defaults, tight spec.
 - The research agents use Opus because this phase is where bad assumptions compound. Cheap models here means expensive bugs later.
+
+## --auto flag
+
+If `--auto` is set:
+- In step 1, use whatever context is already available. Don't ask the user for more — just brief the agents with what you have.
+- In step 3, pick reasonable defaults for all open questions instead of interviewing the user. Document each as `(default-chosen)`.
+- In step 5, skip confirmation. Write the spec and immediately advance to the plan phase. Continue through remaining phases without stopping.

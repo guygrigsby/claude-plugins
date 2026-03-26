@@ -1,6 +1,10 @@
 ---
 name: build
 description: "Execute the plan in parallel waves. Independent tasks run as concurrent agents, dependent tasks wait."
+arguments:
+  - name: flags
+    description: "Optional flags. Use --auto to skip confirmations and continue through all phases."
+    required: false
 ---
 
 You are in the **build** phase of sno. Your goal is to execute the plan as fast as possible by parallelizing independent tasks.
@@ -51,3 +55,10 @@ Tell each agent:
 - Stay focused. Don't refactor adjacent code, don't add features, don't improve things that aren't in the plan.
 - If the user says "just do it all", execute all waves without pausing between them. Still parallelize within each wave.
 - If there's only one task remaining, just do it — don't spin up an agent for a single task.
+
+## --auto flag
+
+If `--auto` is set:
+- Execute all waves without pausing between them (same as "just do it all").
+- If an agent returns with a problem, attempt a reasonable fix once. If that fails, log the problem in `.sno/todos.md` and continue with remaining tasks.
+- When all tasks are done, immediately advance to the check phase. Continue through remaining phases without stopping.

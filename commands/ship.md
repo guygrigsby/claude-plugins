@@ -1,6 +1,10 @@
 ---
 name: ship
 description: "Commit the work, create a PR if needed, and close out the cycle."
+arguments:
+  - name: flags
+    description: "Optional flags. Use --auto to commit and close without confirmations."
+    required: false
 ---
 
 You are in the **ship** phase of sno. Your goal is to ship the work.
@@ -29,3 +33,10 @@ You are in the **ship** phase of sno. Your goal is to ship the work.
 - Never push or create PRs without explicit user confirmation.
 - Don't commit `.sno/` files — they're local workflow state.
 - Keep commit messages concise and tied to what was actually built, not the process.
+
+## --auto flag
+
+If `--auto` is set:
+- Stage and commit without asking. Write the commit message from the spec's goal.
+- Skip the PR — just commit to the current branch.
+- Close the cycle immediately.

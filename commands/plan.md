@@ -1,6 +1,10 @@
 ---
 name: plan
 description: "Break the spec into concrete tasks with dependency tracking. Produce a plan in .sno/plan.md."
+arguments:
+  - name: flags
+    description: "Optional flags. Use --auto to skip confirmations and continue through all phases."
+    required: false
 ---
 
 You are in the **plan** phase of sno. Your goal is to turn the spec into an actionable task list with explicit dependencies so build can parallelize.
@@ -43,3 +47,8 @@ You are in the **plan** phase of sno. Your goal is to turn the spec into an acti
 - 3-10 tasks is the sweet spot. If you have more than 10, you're planning too granularly. If you have fewer than 3, the spec might be too small to need a plan (that's fine — just make 1-2 tasks).
 - Don't add tasks the user didn't ask for. No "add tests" or "update docs" unless the spec says so.
 - Maximize parallelism. If two tasks CAN be independent, make them independent. Structure the work to minimize sequential bottlenecks.
+
+## --auto flag
+
+If `--auto` is set:
+- Skip the user confirmation in step 5. Write the plan and immediately advance to the build phase. Continue through remaining phases without stopping.

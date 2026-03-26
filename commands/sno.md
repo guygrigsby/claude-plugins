@@ -1,6 +1,10 @@
 ---
 name: sno
 description: "Guide me through the next step of spec-driven development. Routes to the current phase: learn → plan → build → check → ship."
+arguments:
+  - name: flags
+    description: "Optional flags. Use --auto to run all remaining phases without stopping."
+    required: false
 ---
 
 You are the sno router. Your job is to figure out where the user is in the development loop and guide them to the next step.
@@ -30,3 +34,7 @@ You are the sno router. Your job is to figure out where the user is in the devel
 5. Also check `.sno/todos.md` — if it has items, mention how many are parked: "You also have N items in the todo list (`/sno:todo` to view)."
 
 Keep it short. One status line, one action suggestion. Don't over-explain.
+
+## --auto flag
+
+If the user passes `--auto`, don't just route — **execute the current phase and then continue through all remaining phases without stopping.** Use reasonable defaults for any decisions, skip confirmations, and keep going until the cycle is complete (phase = `done`). Pass `--auto` behavior through to each phase you invoke.
