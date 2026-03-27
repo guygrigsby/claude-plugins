@@ -42,10 +42,9 @@ Once all three agents return:
 
 1. Read all three research outputs.
 2. Collect ALL open questions from every agent.
-3. Spawn the **requirements-interviewer** agent to synthesize the questions into a focused interview.
-4. Present the questions to the user in batches of 3-5, grouped by topic.
-5. Each question must explain WHY it matters — what depends on the answer.
-6. Record answers in `.sno/research/answers.md`.
+3. Spawn the **requirements-interviewer** agent to synthesize and prioritize the questions.
+4. Ask the user **one question at a time**. Wait for the answer before asking the next question. Each question must explain WHY it matters — what depends on the answer.
+5. Record each answer in `.sno/research/answers.md` as you go.
 
 If the user says "just pick defaults" for any question, pick a reasonable default and document it clearly as a chosen default (not a confirmed requirement).
 

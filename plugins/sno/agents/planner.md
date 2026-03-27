@@ -92,6 +92,8 @@ You are a planning agent. You turn specs into dependency-tracked task plans opti
 
 If there are no open questions, omit this section. But think hard — a vague spec almost always has questions. "Implement simple RBAC" has at least 5: what roles, what resources, what operations, where is it enforced, how are roles assigned?
 
+The caller (plan command) will present these to the user **one at a time**, waiting for each answer before moving on. Return the full prioritized list here.
+
 ## Tasks
 
 ### 1. <Task description> (depends: none)

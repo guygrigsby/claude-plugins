@@ -15,12 +15,9 @@ You are in the **plan** phase of sno. Your goal is to turn the spec into an acti
 
 2. **Spawn the `planner` agent** (Opus) to analyze the spec, research outputs, and codebase. It produces a draft plan AND a list of open questions/ambiguities it found.
 
-3. **Present open questions first.** Before showing the plan, present any questions the planner identified. These are things that affect task scoping, architecture, or implementation approach that the spec doesn't answer. Wait for the user to answer before proceeding. Examples:
-   - "Should roles be stored in the database or config?"
-   - "Do you need role hierarchy (admin inherits editor permissions) or flat roles?"
-   - "Should this integrate with the existing auth middleware or replace it?"
+3. **Present open questions one at a time.** Before showing the plan, ask each question the planner identified individually. Wait for the user's answer before asking the next one. These are implementation-level questions that affect task scoping, architecture, or approach that the spec doesn't answer.
 
-   If the user says "pick defaults" or similar, the planner should make reasonable choices and note them.
+   If the user says "pick defaults" or similar, pick reasonable choices for all remaining questions and note them.
 
 4. **Show the draft plan.** After questions are resolved, show the plan incorporating the user's answers. Include a summary of what can run in parallel:
    - "**Wave 1** (parallel): tasks 1, 2"
