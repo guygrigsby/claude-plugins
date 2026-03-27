@@ -21,6 +21,13 @@ A lightweight Claude Code plugin for spec-driven development.
 - **DDD always.** Every spec identifies bounded contexts and aggregates.
 - **5NF target.** Data models normalize fully; denormalization requires justification.
 - **No assumptions.** If the user didn't say it, it's an open question. Ask, don't guess.
+- **Extensibility first.** Storage, network, parsing, alerting, syncing -- all abstracted as ports.
+- **One question at a time.** Don't batch questions. Let each answer inform the next.
+- **Research before decisions.** Parallel agents investigate before a single line of spec. Cheap thinking now, expensive rework avoided later.
+- **Coverage, not trust.** Every phase cross-checks the previous one. Spec vs research, plan vs acceptance criteria, check vs spec.
+- **Flag it, don't fix it.** Agents report scope surprises -- they don't silently add work. The user decides what's in scope.
+- **Parallelize by default.** Structure work so independent things run simultaneously. Interfaces first to unblock everything else.
+- **Domain names, not generic names.** No `model`, `types`, `utils`, `helpers`. Name things after what they are in the domain.
 
 ## Learn Phase Agents
 

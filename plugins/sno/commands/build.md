@@ -33,7 +33,7 @@ You are in the **build** phase of sno. Your goal is to execute the plan as fast 
 
 4. **Move to next wave.** Repeat until all tasks are complete.
 
-5. When all tasks are done, update `.sno/state.json` phase to `check`.
+5. When all tasks are done, update `.sno/state.json` phase to `check`. Then tell the user: "Run `/sno:check` to verify the work."
 
 ## Parallel agent instructions
 

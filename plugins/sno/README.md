@@ -35,6 +35,12 @@ init -> learn -> plan -> build -> check -> ship
 - **5NF target.** Data models normalize fully. Denormalization requires justification.
 - **No assumptions.** Ambiguity becomes an open question, not a guess.
 - **Extensibility first.** Storage, network, parsing, alerting, syncing -- all abstracted as ports.
+- **One question at a time.** Don't batch questions. Let each answer inform the next.
+- **Research before decisions.** Parallel agents investigate before a single line of spec. Cheap thinking now, expensive rework avoided later.
+- **Coverage, not trust.** Every phase cross-checks the previous one. Spec vs research, plan vs acceptance criteria, check vs spec.
+- **Flag it, don't fix it.** Agents report scope surprises -- they don't silently add work. The user decides what's in scope.
+- **Parallelize by default.** Structure work so independent things run simultaneously. Interfaces first to unblock everything else.
+- **Domain names, not generic names.** No `model`, `types`, `utils`, `helpers`. Name things after what they are in the domain.
 
 ## License
 

@@ -127,7 +127,7 @@ Before showing the spec, cross-check:
 If anything was dropped, either add it or document why it was excluded in the Research Coverage section.
 
 ### Step 6: Confirm
-Show the spec to the user. When they confirm, update `.sno/state.json` phase to `plan`.
+Show the spec to the user. When they confirm, update `.sno/state.json` phase to `plan`. Then tell the user: "Run `/sno:plan` when you're ready to break this into tasks."
 
 ## Rules
 

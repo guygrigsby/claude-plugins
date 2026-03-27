@@ -61,7 +61,7 @@ You are in the **plan** phase of sno. Your goal is to turn the spec into an acti
 
 Each task must have all five fields: status, files, verify, done, and dependencies in the heading.
 
-8. Update `.sno/state.json` phase to `build`.
+8. Update `.sno/state.json` phase to `build`. Then tell the user: "Run `/sno:build` to start executing the plan."
 
 ## Dependency rules
 - Every task must declare `(depends: none)` or `(depends: <task numbers>)`.

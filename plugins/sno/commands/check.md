@@ -28,7 +28,7 @@ You are in the **check** phase of sno. Your goal is to verify the work.
    - List each criterion with pass/fail.
    - If something fails, explain what's wrong and suggest a fix.
 
-5. If everything passes, update `.sno/state.json` phase to `ship`.
+5. If everything passes, update `.sno/state.json` phase to `ship`. Then tell the user: "Run `/sno:ship` to commit and ship."
 
 6. If something fails, **auto-diagnose**:
    - For each failing criterion, spawn a debug agent (via Agent tool) to investigate the root cause. Give it:
