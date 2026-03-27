@@ -5,13 +5,13 @@ Claude Code plugins by Guy Grigsby.
 ## Install
 
 ```
-/plugin marketplace add guygrigsby/sno
+/plugin marketplace add guygrigsby/claude-plugins
 ```
 
 Then install individual plugins:
 
 ```
-/plugin install sno
+/plugin install sno@guygrigsby-plugins
 ```
 
 ## Plugins

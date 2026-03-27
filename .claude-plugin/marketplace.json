@@ -11,7 +11,7 @@
       "version": "1.2.0",
       "source": {
         "source": "git-subdir",
-        "url": "https://github.com/guygrigsby/sno.git",
+        "url": "https://github.com/guygrigsby/claude-plugins.git",
         "path": "plugins/sno"
       }
     }
