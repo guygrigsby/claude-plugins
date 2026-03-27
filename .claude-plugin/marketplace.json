@@ -1,6 +1,6 @@
 {
-  "name": "sno",
-  "description": "Lightweight spec-driven development plugins",
+  "name": "guygrigsby-plugins",
+  "description": "Claude Code plugins by Guy Grigsby",
   "owner": {
     "name": "Guy Grigsby"
   },
@@ -8,10 +8,11 @@
     {
       "name": "sno",
       "description": "Lightweight spec-driven development. Learn, plan, build, check, ship.",
-      "version": "1.1.1",
+      "version": "1.2.0",
       "source": {
-        "source": "github",
-        "repo": "guygrigsby/sno"
+        "source": "git-subdir",
+        "url": "https://github.com/guygrigsby/sno.git",
+        "path": "plugins/sno"
       }
     }
   ]

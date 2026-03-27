@@ -1,44 +1,27 @@
-# sno
+# guygrigsby-plugins
 
-A lightweight Claude Code plugin for spec-driven development.
+A Claude Code plugin marketplace by Guy Grigsby.
 
-## The Loop
+## Structure
 
-`learn → plan → build → check → ship`
+Each plugin lives in its own directory under `plugins/`:
 
-- `/sno` — routes to the next step
-- `/sno:new` — start a new cycle (pulls latest, creates branch, archives previous cycle if done)
-- `/sno:learn` — gather context, write a spec
-- `/sno:plan` — break spec into tasks (structured format with verify/done per task)
-- `/sno:build` — execute tasks in parallel waves (commits per wave)
-- `/sno:check` — verify work against spec (auto-diagnoses failures)
-- `/sno:ship` — commit remaining changes and ship
-- `/sno:todo` — parking lot for later
-- `/sno:go` — quick mode for small tasks, skip the full ceremony
+```
+plugins/
+└── sno/           # spec-driven development
+    ├── .claude-plugin/plugin.json
+    ├── commands/
+    ├── agents/
+    └── CLAUDE.md
+```
 
-## Design Principles
+## Adding a New Plugin
 
-- **DDD always.** Every spec identifies bounded contexts and aggregates.
-- **5NF target.** Data models normalize fully; denormalization requires justification.
-- **No assumptions.** If the user didn't say it, it's an open question. Ask, don't guess.
+1. Create `plugins/<name>/` with a `.claude-plugin/plugin.json`
+2. Add commands in `plugins/<name>/commands/` and agents in `plugins/<name>/agents/`
+3. Add an entry to `.claude-plugin/marketplace.json` with `git-subdir` source pointing to `plugins/<name>`
+4. Add a `CLAUDE.md` in the plugin directory describing the plugin
 
-## Learn Phase Agents
+## Plugins
 
-The learn phase spawns parallel Opus agents:
-- `domain-researcher` — DDD analysis (bounded contexts, aggregates, events)
-- `data-modeler` — entity/relationship modeling, 5NF normalization
-- `codebase-scout` — existing code patterns, conventions, risks
-- `requirements-interviewer` — synthesizes open questions into focused interview
-
-## Project State
-
-All workflow state lives in `.sno/` in the user's project directory:
-- `state.json` — current phase
-- `spec.md` — the spec
-- `plan.md` — the task list
-- `todos.md` — parking lot
-- `research/` — agent outputs from learn phase
-
-## Plugin Structure
-
-See [.claude/plugin-layout.md](.claude/plugin-layout.md) for details.
+- **[sno](plugins/sno/CLAUDE.md)** -- spec-driven development loop (learn, plan, build, check, ship)
