@@ -16,7 +16,8 @@ sno/
 │   ├── domain-researcher.md         # DDD analysis (Opus)
 │   ├── data-modeler.md              # 5NF data modeling (Opus)
 │   ├── codebase-scout.md            # Existing code analysis (Opus)
-│   └── requirements-interviewer.md  # Gap synthesis & interview (Opus)
+│   ├── requirements-interviewer.md  # Gap synthesis & interview (Opus)
+│   └── pr-reviewer.md              # Full PR-style code review (Opus)
 ├── hooks/
 │   └── sno-statusline.js           # Blue/white statusline
 ├── .gitignore

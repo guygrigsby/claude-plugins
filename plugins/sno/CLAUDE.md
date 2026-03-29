@@ -52,6 +52,12 @@ The plan phase spawns parallel Opus agents, then a critical reviewer:
 **Wave 2 (after wave 1 completes):**
 - `critical-reviewer` -- adversarial review of the assembled plan, checks coverage gaps, dependency correctness, missed risks, and scope drift
 
+## Check Phase Agents
+
+The check phase spawns agents in parallel alongside the acceptance criteria verification:
+
+- `pr-reviewer` -- full PR-style code review of the diff against the base branch. Reviews correctness, security, performance, consistency, maintainability, and test coverage. Returns a structured review with verdict (APPROVE / REQUEST CHANGES / COMMENT). Critical issues block shipping.
+
 ## Project State
 
 All workflow state lives in `.sno/` in the user's project directory:

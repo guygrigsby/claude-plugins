@@ -13,7 +13,9 @@ You are in the **check** phase of sno. Your goal is to verify the work.
 
 1. Read `.sno/spec.md` and `.sno/plan.md`.
 
-2. **Check acceptance criteria in parallel.** For each criterion in the spec's "Done when" section, spawn a **verification agent** (via Agent tool). If there are 3+ criteria, run them all in parallel — each criterion reads different code and can be checked independently. Each agent gets:
+2. **Check acceptance criteria and review code in parallel.** Spawn the following agents simultaneously (via Agent tool):
+
+   **Verification agents** — one per criterion in the spec's "Done when" section. Each agent gets:
    - The specific criterion to verify
    - The relevant task(s) from the plan that implement it
    - The spec sections for context
@@ -24,29 +26,38 @@ You are in the **check** phase of sno. Your goal is to verify the work.
      4. **Better approach**: Is there a simpler or more robust way to do this?
    - Each agent returns: pass/fail, evidence (what it checked), and any concerns.
 
-   **In parallel with the verification agents**, also spawn a **README check agent** that:
+   **PR review agent** (`pr-reviewer`) — runs in parallel with the verification agents. Spawn it with `subagent_type: "sno:pr-reviewer"`. It reviews the full diff against the base branch for code quality, security, performance, consistency, and maintainability. It returns a structured review with critical issues, warnings, nits, and a verdict (APPROVE / REQUEST CHANGES / COMMENT).
+
+   **README check agent** — also in parallel:
    - Reads `README.md` and compares it against the spec and what was built
    - Checks if commands, features, or behaviors described in the README still match reality
    - Checks if the completed work adds anything the README should reflect
    - Returns: up-to-date (yes/no) and specific changes needed if not
 
-   If there are only 1-2 criteria, check them directly instead of spawning agents — overhead isn't worth it.
+   If there are only 1-2 criteria, check them directly instead of spawning agents — but always spawn the PR reviewer regardless.
 
-3. **Collect results and update README.** Once all verification agents return, collect pass/fail results. If the README agent identified needed changes, apply them.
+3. **Collect results and update README.** Once all agents return:
+   - Collect pass/fail results from verification agents.
+   - Collect the PR review verdict and any critical issues or warnings.
+   - If the README agent identified needed changes, apply them.
 
 4. **Adversarial re-check.** After the initial pass, assume at least one criterion you marked as passing has a subtle gap. Re-check each passing criterion with adversarial intent — look for the 80% implementation (where the happy path works but edge cases don't).
 
 5. **Report results** to the user:
    - List each criterion with pass/fail.
    - If something fails, explain what's wrong and suggest a fix.
+   - Show the PR review summary: verdict, critical issues, and warnings. Include file:line references.
+   - Nits from the PR review can be listed briefly or omitted if the review is otherwise clean.
 
-6. If everything passes, update `.sno/state.json` phase to `ship`. Then tell the user: "Run `/sno:ship` to commit and ship."
+6. If everything passes **and** the PR review verdict is APPROVE or COMMENT (no critical issues), update `.sno/state.json` phase to `ship`. Then tell the user: "Run `/sno:ship` to commit and ship."
+
+   If acceptance criteria pass but the PR review returns REQUEST CHANGES, treat the critical issues as failures — do not advance to ship until they're resolved.
 
 **STOP.** Do not proceed to the ship phase. Do not start committing or shipping anything. Your job ends here — return control to the user. The next phase starts only when the user explicitly runs `/sno:ship`.
 
-7. If something fails, **auto-diagnose**:
-   - For each failing criterion, spawn a **debug agent per failure in parallel** (via Agent tool). Each gets:
-     - The failing criterion
+7. If something fails (criteria or PR review critical issues), **auto-diagnose**:
+   - For each failing criterion **and** each PR review critical issue, spawn a **debug agent per failure in parallel** (via Agent tool). Each gets:
+     - The failing criterion or critical issue (with file:line from the PR review)
      - The relevant code files
      - Any test output or error messages
    - Each debug agent returns: what's wrong, why, and a concrete fix plan (specific files + changes).
@@ -64,6 +75,7 @@ You are in the **check** phase of sno. Your goal is to verify the work.
 ## --auto flag
 
 The STOP gate above does NOT apply when `--auto` is set. With `--auto`:
-- Run all checks and update the README without pausing.
-- If everything passes, immediately advance to the ship phase and continue.
-- If something fails, run auto-diagnosis. If the fix is small (< 20 lines total), apply it directly. If larger, log the failures and fix plans in `.sno/todos.md` and advance to ship anyway — don't block.
+- Run all checks (including PR review) and update the README without pausing.
+- If everything passes and the PR review verdict is APPROVE or COMMENT, immediately advance to the ship phase and continue.
+- If something fails (criteria or PR review critical issues), run auto-diagnosis. If the fix is small (< 20 lines total), apply it directly. If larger, log the failures and fix plans in `.sno/todos.md` and advance to ship anyway — don't block.
+- PR review warnings are logged but don't block in `--auto` mode.
