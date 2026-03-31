@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Wu Phase Record",
+  "description": "Status record for a single phase within a wu cycle, stored in .wu/phases/",
+  "type": "object",
+  "required": ["phase_name", "ordinal", "status"],
+  "properties": {
+    "phase_name": {
+      "type": "string",
+      "enum": ["learn", "plan", "risk-analysis", "license-check", "copyright-check", "performance-tradeoff", "build", "check", "cipher", "ship"],
+      "description": "Name of the phase",
+      "examples": ["risk-analysis"]
+    },
+    "ordinal": {
+      "type": "number",
+      "description": "Execution order of this phase within the cycle",
+      "minimum": 0,
+      "examples": [2]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["pending", "active", "passed", "failed", "skipped"],
+      "description": "Current status of the phase"
+    },
+    "started_at": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when the phase began, null if not yet started",
+      "examples": ["2026-03-31T14:05:00Z"]
+    },
+    "completed_at": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when the phase finished, null if not yet completed",
+      "examples": ["2026-03-31T14:12:00Z"]
+    },
+    "verdict": {
+      "type": ["object", "null"],
+      "description": "Phase-specific verdict payload, null if phase has no verdict yet",
+      "examples": [{"passed": true, "issues": [], "slop_score": 0.1}]
+    },
+    "model_override": {
+      "type": ["string", "null"],
+      "enum": ["opus", "sonnet", "haiku", null],
+      "description": "Model tier override for this phase, null to use default"
+    }
+  },
+  "additionalProperties": false
+}

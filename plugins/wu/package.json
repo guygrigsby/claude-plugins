@@ -1,0 +1,23 @@
+{
+  "name": "@guygrigsby/wu",
+  "version": "0.1.0",
+  "description": "Zero-slop development with persona-driven analysis and cloud-first agent dispatch.",
+  "author": {
+    "name": "Guy Grigsby"
+  },
+  "license": "MIT",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@anthropic-ai/claude-agent-sdk": "*"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "vitest": "^3.0.0"
+  }
+}

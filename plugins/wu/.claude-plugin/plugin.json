@@ -1,0 +1,9 @@
+{
+  "name": "wu",
+  "version": "0.1.0",
+  "description": "Zero-slop development with persona-driven analysis and cloud-first agent dispatch.",
+  "author": {
+    "name": "Guy Grigsby"
+  },
+  "license": "MIT"
+}

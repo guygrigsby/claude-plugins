@@ -8,11 +8,21 @@
     {
       "name": "sno",
       "description": "Lightweight spec-driven development. Learn, plan, build, check, ship.",
-      "version": "1.5.1",
+      "version": "1.11.0",
       "source": {
         "source": "git-subdir",
         "url": "https://github.com/guygrigsby/claude-plugins.git",
         "path": "plugins/sno"
+      }
+    },
+    {
+      "name": "wu",
+      "description": "Zero-slop development with persona-driven analysis and cloud-first agent dispatch.",
+      "version": "0.1.0",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/guygrigsby/claude-plugins.git",
+        "path": "plugins/wu"
       }
     }
   ]

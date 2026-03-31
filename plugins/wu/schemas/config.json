@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Wu Cycle Configuration",
+  "description": "Configuration for a wu development cycle, embedded in state.json or stored standalone",
+  "type": "object",
+  "properties": {
+    "skip_phases": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["plan", "risk-analysis", "license-check", "copyright-check", "performance-tradeoff", "build", "check", "cipher"]
+      },
+      "description": "Phases to skip. Cannot include 'learn' or 'ship'.",
+      "default": [],
+      "examples": [["license-check", "copyright-check"]]
+    },
+    "model_overrides": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "enum": ["opus", "sonnet", "haiku"]
+      },
+      "description": "Per-phase model override. Keys are phase names, values are model tiers.",
+      "examples": [{"risk-analysis": "opus", "license-check": "haiku"}]
+    },
+    "budget": {
+      "type": "object",
+      "properties": {
+        "warning_threshold_tokens": {
+          "type": "number",
+          "description": "Token count at which to warn the user",
+          "examples": [500000]
+        },
+        "total_tokens_used": {
+          "type": "number",
+          "description": "Running total of tokens consumed in this cycle",
+          "default": 0,
+          "examples": [0]
+        }
+      },
+      "additionalProperties": false
+    },
+    "concurrency": {
+      "type": "object",
+      "properties": {
+        "max_parallel_agents": {
+          "type": "number",
+          "description": "Maximum number of agents to dispatch in parallel",
+          "default": 4,
+          "minimum": 1,
+          "maximum": 10,
+          "examples": [4, 5]
+        }
+      },
+      "additionalProperties": false
+    },
+    "slop_threshold": {
+      "type": "number",
+      "description": "Slop score threshold (0.0-1.0). Results above this trigger cipher re-verification.",
+      "default": 0.3,
+      "minimum": 0.0,
+      "maximum": 1.0,
+      "examples": [0.3]
+    },
+    "cipher_rounds": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "number",
+        "minimum": 1
+      },
+      "description": "Per-phase cipher round count. Keys are phase names, values are number of verification rounds.",
+      "examples": [{"learn": 2, "plan": 1}]
+    }
+  },
+  "additionalProperties": false
+}

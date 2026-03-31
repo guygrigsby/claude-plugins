@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Wu Cycle State",
+  "description": "Top-level state for a wu development cycle, stored at .wu/state.json",
+  "type": "object",
+  "required": ["cycle_slug", "created_at", "updated_at", "description", "current_phase", "status", "config"],
+  "properties": {
+    "cycle_slug": {
+      "type": "string",
+      "description": "URL-safe identifier for this cycle",
+      "examples": ["add-auth-middleware"]
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when the cycle was created",
+      "examples": ["2026-03-31T14:00:00Z"]
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of the last state mutation",
+      "examples": ["2026-03-31T15:30:00Z"]
+    },
+    "description": {
+      "type": "string",
+      "description": "Human-readable description of the cycle goal",
+      "examples": ["Add JWT authentication middleware to the API gateway"]
+    },
+    "current_phase": {
+      "type": "string",
+      "enum": ["learn", "plan", "risk-analysis", "license-check", "copyright-check", "performance-tradeoff", "build", "check", "cipher", "ship"],
+      "description": "The phase the cycle is currently in"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["active", "paused", "completed", "aborted"],
+      "description": "Overall lifecycle status of the cycle"
+    },
+    "config": {
+      "$ref": "config.json",
+      "description": "Cycle-level configuration overrides"
+    }
+  },
+  "additionalProperties": false
+}
