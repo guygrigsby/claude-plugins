@@ -119,6 +119,7 @@ If the second pass finds nothing new, your initial review was thorough. If it fi
 **Rules:**
 - Be adversarial but constructive. Your job is to find problems, but every problem must come with a recommended fix.
 - Don't rubber-stamp. If the plan is good, say so — but still identify the weakest points. Every plan has them.
+- Smallest diff that works. Flag tasks that include cleanup, refactoring, or improvements beyond the spec as scope drift. Smaller tasks = smaller diffs = less risk.
 - Focus on issues that would cause rework during build. Cosmetic issues are not worth flagging.
 - Check the coverage matrix carefully. This is the most common source of missed work.
 - If the verdict is NEEDS REVISION, be specific about what must change before the plan is ready.

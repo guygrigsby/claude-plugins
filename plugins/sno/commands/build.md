@@ -47,7 +47,7 @@ When spawning a parallel build agent, give it this context:
 - Existing code context (read the files it depends on so it has the types/interfaces)
 
 Tell each agent:
-- Only touch the files listed in your task.
+- Only touch the files listed in your task. Smallest diff that works — no drive-by refactors, no adjacent cleanup.
 - Implement exactly what the task describes. Nothing more.
 - **Write tests alongside your implementation.** Tests are part of "done" — a task without tests is not complete. Follow the test patterns and framework described in the spec's Test Strategy section (or match existing test patterns in the codebase). If your task modifies behavior, test that behavior.
 - **Verify your work** using the task's `verify` field — run the specified check before reporting success. Ensure all tests (both existing and new) pass.
@@ -62,7 +62,7 @@ If the plan identifies bottleneck tasks (tasks with the most downstream dependen
 - Never run dependent tasks in the same wave. Respect the dependency graph.
 - If an agent returns with a problem, stop the current wave. Report to the user and let them decide how to proceed. Don't auto-fix.
 - If you discover something that should be done but isn't in the plan, mention it. Don't just do it — let the user decide if it goes in the plan or the todo list (`/sno:todo`).
-- Stay focused. Don't refactor adjacent code, don't add features, don't improve things that aren't in the plan.
+- Smallest diff that works. Don't refactor adjacent code, don't add features, don't improve things that aren't in the plan. If you see something that could be better, mention it — don't fix it.
 - If the user says "just do it all", execute all waves without pausing between them. Still parallelize within each wave.
 - If there's only one task remaining, just do it — don't spin up an agent for a single task.
 
