@@ -1,6 +1,6 @@
 ---
 name: ship
-description: "Commit the work, create a PR if needed, and close out the cycle."
+description: "Commit the work, open a PR to main, and close out the cycle."
 arguments:
   - name: flags
     description: "Optional flags. Use --auto to commit and close without confirmations."
@@ -20,10 +20,12 @@ You are in the **ship** phase of sno. Your goal is to ship the work.
    - If there are unstaged changes, write a clear commit message based on the spec's goal. Ask the user before committing.
    - If nothing to commit (waves already covered everything), skip to step 3.
 
-3. **Ask about PR**:
-   - If the user is on a feature branch, offer to create a PR.
-   - Use the spec's goal for the PR title and requirements for the description.
-   - Ask the user before creating.
+3. **Create PR**:
+   - Check the current branch name. If it starts with `sno/`, push the branch and create a PR to `main`:
+     - `git push -u origin <branch>`
+     - Use `gh pr create --base main` with the spec's goal as the title and requirements as the body.
+   - If the branch does NOT start with `sno/`, skip this step.
+   - If `gh pr create` fails (e.g., PR already exists), note the error and continue — don't block the cycle close.
 
 4. **Close the cycle**:
    - Update `.sno/state.json` phase to `done`.
@@ -31,7 +33,9 @@ You are in the **ship** phase of sno. Your goal is to ship the work.
    - If there are items in `.sno/todos.md`, mention them: "You have N items in the todo list for next time."
 
 ## Rules
-- Never push or create PRs without explicit user confirmation.
+- On `sno/` branches, push and create a PR to main automatically — no confirmation needed.
+- On non-sno branches, never push without explicit user confirmation.
+- Smallest diff that works. Before committing, review the diff — if you see changes beyond the spec (drive-by refactors, unplanned improvements), flag them to the user.
 - Don't commit `.sno/` files — they're local workflow state.
 - Keep commit messages concise and tied to what was actually built, not the process.
 
@@ -39,5 +43,5 @@ You are in the **ship** phase of sno. Your goal is to ship the work.
 
 If `--auto` is set:
 - Stage and commit without asking. Write the commit message from the spec's goal.
-- Skip the PR — just commit to the current branch.
+- Create the PR (same as step 3 — push and `gh pr create` on `sno/` branches).
 - Close the cycle immediately.

@@ -81,6 +81,7 @@ You are in the **check** phase of sno. Your goal is to verify the work.
 ## Rules
 - Be honest. Don't rubber-stamp. If something doesn't meet the spec, say so.
 - But also be practical. If a criterion is 95% met and the gap is trivial, note it but don't block.
+- Smallest diff that works. If the "better approach" review (question 4) finds improvements, note them for future work — don't require changes now unless correctness or security is at stake.
 - Don't add new requirements during check. If you notice something that should be improved, suggest adding it to `/sno:todo`.
 
 ## --auto flag

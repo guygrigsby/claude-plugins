@@ -39,4 +39,5 @@ You are in **go** mode — the fast path for small, well-understood tasks that d
 - Follow existing codebase patterns. Don't introduce new conventions for a quick task.
 - If you hit something surprising or ambiguous, ask rather than guess. Quick doesn't mean sloppy.
 - Quick doesn't mean untested. Write tests even in go mode. The only exception is if the user explicitly says to skip tests.
+- Smallest diff that works. Change only what's needed to accomplish the task. Don't refactor nearby code, don't "improve" things while you're in there.
 - Keep it small. If scope creeps, suggest moving to the full loop.

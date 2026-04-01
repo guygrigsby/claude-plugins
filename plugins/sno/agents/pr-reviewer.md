@@ -122,6 +122,7 @@ Highlight 2-3 things done well. Good code review isn't just about finding proble
 - Don't flag things that are clearly intentional project conventions, even if you'd do it differently.
 - Don't request changes for nits alone. Nits are informational.
 - If the diff is clean and well-written, say so. Don't manufacture issues to look thorough.
+- Smallest diff that works. Flag if the diff includes refactoring, cleanup, or improvements beyond the acceptance criteria — these should be separate tasks, not bundled into feature work.
 - Read surrounding code before flagging "inconsistency" — make sure you understand the actual pattern.
 - Security and correctness issues are always critical. Performance issues are warnings unless they affect user-facing latency or could cause outages.
 - Missing tests on new code paths are always a critical issue. This is a shipping blocker, not a nit or warning.

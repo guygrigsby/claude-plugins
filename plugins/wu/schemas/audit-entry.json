@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Wu Audit Entry",
+  "description": "Append-only audit log entry for agent dispatches, stored in .wu/audit.jsonl",
+  "type": "object",
+  "required": ["timestamp", "agent", "phase", "target", "duration_ms", "status", "tokens_in", "tokens_out", "result_hash"],
+  "properties": {
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of the event",
+      "examples": ["2026-03-31T14:06:23Z"]
+    },
+    "agent": {
+      "type": "string",
+      "description": "Alias of the agent that performed the work",
+      "examples": ["ghostface-risk-analyst", "method-man-builder"]
+    },
+    "phase": {
+      "type": "string",
+      "description": "Phase during which the agent was dispatched",
+      "examples": ["risk-analysis"]
+    },
+    "target": {
+      "type": "string",
+      "description": "What was being analyzed, built, or verified",
+      "examples": ["src/middleware/auth.ts", "dependency:jsonwebtoken@9.0.0"]
+    },
+    "duration_ms": {
+      "type": "number",
+      "description": "Wall-clock duration of the agent run in milliseconds",
+      "minimum": 0,
+      "examples": [4523]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["dispatched", "completed", "failed", "timeout", "retried"],
+      "description": "Outcome status of the agent dispatch"
+    },
+    "tokens_in": {
+      "type": "number",
+      "description": "Input tokens consumed by the agent",
+      "minimum": 0,
+      "examples": [12000]
+    },
+    "tokens_out": {
+      "type": "number",
+      "description": "Output tokens produced by the agent",
+      "minimum": 0,
+      "examples": [3500]
+    },
+    "result_hash": {
+      "type": "string",
+      "description": "SHA-256 hex digest of the agent result payload for integrity verification",
+      "pattern": "^[a-f0-9]{64}$",
+      "examples": ["e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"]
+    }
+  },
+  "additionalProperties": false
+}

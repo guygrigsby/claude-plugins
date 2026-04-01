@@ -96,6 +96,7 @@ Each task must have all five fields: status, files, verify, done, and dependenci
 - Each task should name the files it touches so the user knows the blast radius.
 - 3-10 tasks is the sweet spot. If you have more than 10, you're planning too granularly. If you have fewer than 3, the spec might be too small to need a plan (that's fine — just make 1-2 tasks).
 - Every implementation task must include tests alongside the implementation. Tests are always required — they are part of "done," not bonus work. Only skip tests if the user explicitly opts out.
+- Smallest diff that works. Each task should produce the minimum change needed. No bundled cleanup, no "while we're in here" improvements.
 - Don't add tasks the user didn't ask for. No "update docs" or unrelated cleanup unless the spec says so.
 - Maximize parallelism. If two tasks CAN be independent, make them independent. Structure the work to minimize sequential bottlenecks.
 
