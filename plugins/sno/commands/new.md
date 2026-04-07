@@ -29,7 +29,7 @@ You are initializing sno in the current project.
 4. Check if `.gitignore` exists. If it does, check whether `.sno/` is already in it. If not, append `.sno/` to `.gitignore`. If no `.gitignore` exists, create one with `.sno/` in it.
 
 5. Tell the user:
-   - "sno initialized on branch `sno/<branch-name>`. Run `/sno:learn` to start, or `/sno` to see where you are."
+   - "sno initialized on branch `sno/<branch-name>`. Starting learn phase..."
    - If a cycle was archived, mention: "Previous cycle archived to `.sno/archive/<N>/`."
 
-That's it. Don't start the learn phase, don't do anything else beyond these steps.
+6. **Immediately proceed to the learn phase.** Invoke `/sno:learn` — do not wait for the user to run it manually. Pass through any flags the user provided (e.g., `--auto`).
