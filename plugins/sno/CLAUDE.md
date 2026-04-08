@@ -57,7 +57,8 @@ The plan phase discovers available MCP tools, then spawns parallel Opus agents a
 
 **Wave 1 (parallel):**
 - `planner` -- task decomposition, dependency graph, wave planning, coverage matrix, MCP tool assignment
-- `ux-reviewer` -- interaction flows, error UX, CLI/TUI/GUI ergonomics, WCAG 2.1 AA accessibility
+- `ux-reviewer` -- interaction flows, error UX, CLI/TUI/GUI ergonomics
+- `accessibility-auditor` -- WCAG 2.1 AA compliance, keyboard navigation, screen reader support, color contrast, motion sensitivity
 - `antipattern-detector` -- tech stack gotchas, domain antipatterns, security pitfalls, dependency risks
 
 **Wave 2 (after wave 1 completes):**
@@ -69,6 +70,7 @@ The check phase spawns agents in parallel alongside the acceptance criteria veri
 
 - `pr-reviewer` -- full PR-style code review of the diff against the base branch. Reviews correctness, security, performance, consistency, maintainability, and test coverage. Missing tests on new code paths are a critical (shipping-blocking) issue. Returns a structured review with verdict (APPROVE / REQUEST CHANGES / COMMENT). Critical issues block shipping.
 - `security-auditor` -- reviews code diff for security vulnerabilities, verifies threat mitigations from learn phase are implemented, checks security requirements coverage. Returns verdict (PASS / FAIL). Critical security issues block shipping.
+- `accessibility-auditor` -- audits code diff for WCAG 2.1 AA compliance (color contrast, keyboard navigation, screen reader support, semantic HTML, motion sensitivity). Cross-references plan-phase recommendations from `.sno/research/accessibility.md`. Returns verdict (PASS / FAIL). Critical accessibility issues block shipping.
 - `test-coverage` -- identifies new/modified code paths in the diff and verifies each has corresponding test coverage. Gaps block shipping.
 - `codex review` (conditional) -- if the codex plugin is installed, runs an additional code review pass via `/codex:rescue`. Skipped silently if not available.
 
@@ -83,6 +85,7 @@ All workflow state lives in `.sno/` in the user's project directory:
   - `prior-art.md`, `domain.md`, `data-model.md`, `codebase.md`, `service-layer.md`
   - `assumptions.md` -- unstated assumptions surfaced by assumption-miner
   - `security.md` -- security threats and mitigations from security-researcher
+  - `accessibility.md` -- accessibility requirements and recommendations from accessibility-auditor (plan phase)
   - `available-tools.md` -- MCP tools discovered during plan phase
   - `answers.md` -- user responses to interview questions
 

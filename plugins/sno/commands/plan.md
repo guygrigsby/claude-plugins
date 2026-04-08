@@ -42,20 +42,22 @@ Update `.sno/state.json` phase to `plan`.
 
    If no relevant MCP tools are found, note that in the file and proceed — this step is informational, not blocking.
 
-3. **Spawn parallel plan agents.** Launch these three agents **in parallel** using the Agent tool:
+3. **Spawn parallel plan agents.** Launch these four agents **in parallel** using the Agent tool:
 
    1. **planner** — Analyzes the spec, research outputs, and codebase. Produces a draft plan with dependency-tracked tasks and a list of open questions/ambiguities. Uses Opus.
    2. **ux-reviewer** — Reviews user experience: interaction flows, error UX, CLI ergonomics, UI patterns, developer experience. Adapts to the interface type (CLI, TUI, GUI, API, library). Uses Opus.
    3. **antipattern-detector** — Identifies antipatterns, gotchas, and common mistakes specific to the tech stack and domain. Checks dependencies for known issues. Uses Opus.
+   4. **accessibility-auditor** — Reviews the spec for accessibility requirements, gaps, and risks. Identifies applicable WCAG 2.1 AA criteria for the interface type and produces concrete recommendations for the planner to incorporate into tasks. Uses Opus.
 
    Give each agent the user's description and the paths to the spec and research outputs. Pass the planner the path to `.sno/research/available-tools.md` so it can assign MCP tools to specific tasks where appropriate. The spec already contains service layer analysis from the learn phase — the planner should use it.
 
-4. **Present open questions one at a time.** Collect open questions from ALL three agents. Deduplicate and prioritize them. Before showing the plan, ask each question individually. Wait for the user's answer before asking the next one. These are implementation-level questions that affect task scoping, architecture, or approach that the spec doesn't answer.
+4. **Present open questions one at a time.** Collect open questions from ALL four agents. Deduplicate and prioritize them. Before showing the plan, ask each question individually. Wait for the user's answer before asking the next one. These are implementation-level questions that affect task scoping, architecture, or approach that the spec doesn't answer.
 
    If the user says "pick defaults" or similar, pick reasonable choices for all remaining questions and note them.
 
 5. **Incorporate agent findings into the draft plan.** Take the planner's draft plan and enrich it with:
-   - UX reviewer's must-have recommendations (error UX, interaction flows, accessibility)
+   - UX reviewer's must-have recommendations (error UX, interaction flows)
+   - Accessibility auditor's must-have recommendations (WCAG compliance, keyboard navigation, screen reader support, color contrast)
    - Antipattern detector's mitigations (add guardrails to relevant tasks, reorder if needed)
 
    Include a summary of what can run in parallel:
@@ -69,7 +71,10 @@ Update `.sno/state.json` phase to `plan`.
    - Task quality issues
    - Missed risks from the antipattern report
    - UX recommendations that didn't make it into tasks
+   - Accessibility recommendations that didn't make it into tasks
    - Service layer coherence (cross-check against the spec's Service Layer section)
+
+   Write the accessibility auditor's output to `.sno/research/accessibility.md` so the check phase can cross-reference it.
 
    If the critical reviewer's verdict is NEEDS REVISION, incorporate its recommended changes and **re-run the critical reviewer once more** on the revised plan. This catches issues introduced by the revision itself. Cap at 2 critical review rounds — if it still says NEEDS REVISION after two passes, present both the plan and the remaining concerns to the user and let them decide. If PASS WITH CONCERNS, note the concerns when presenting.
 

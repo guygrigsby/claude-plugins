@@ -32,6 +32,8 @@ You are in the **check** phase of sno. Your goal is to verify the work.
 
    **Security auditor agent** (`security-auditor`) — also in parallel. Spawn with `subagent_type: "sno:security-auditor"`. It reviews the diff for security vulnerabilities, checks that security requirements from the spec are implemented, and verifies that threat mitigations from `.sno/research/security.md` are present in the code. Returns a structured audit with critical issues, warnings, coverage tables, and a verdict (PASS / FAIL). Critical security issues block shipping.
 
+   **Accessibility auditor agent** (`accessibility-auditor`) — also in parallel. Spawn with `subagent_type: "sno:accessibility-auditor"`. It audits the diff for WCAG 2.1 AA compliance — color contrast, keyboard navigation, screen reader support, semantic HTML, motion sensitivity. Cross-references accessibility requirements from the spec and recommendations from `.sno/research/accessibility.md` (if it exists from the plan phase). Returns a structured audit with critical issues, warnings, coverage tables, and a verdict (PASS / FAIL). Critical accessibility issues block shipping.
+
    **Test coverage agent** — also in parallel:
    - Identifies all new or modified code paths in the diff
    - Checks whether each code path has corresponding test coverage
@@ -51,6 +53,7 @@ You are in the **check** phase of sno. Your goal is to verify the work.
    - Collect the PR review verdict and any critical issues or warnings.
    - If a codex review was run, collect its findings alongside the PR review.
    - Collect the security audit verdict and any critical issues or warnings.
+   - Collect the accessibility audit verdict and any critical issues or warnings.
    - Collect the test coverage assessment. Missing tests on new code paths are treated as critical issues — they block shipping, same as PR review critical issues.
    - If the README agent identified needed changes, apply them.
 
@@ -61,12 +64,13 @@ You are in the **check** phase of sno. Your goal is to verify the work.
    - If something fails, explain what's wrong and suggest a fix.
    - Show the PR review summary: verdict, critical issues, and warnings. Include file:line references.
    - Show the security audit summary: verdict, critical issues, warnings, and coverage tables.
+   - Show the accessibility audit summary: verdict, critical issues, warnings, and coverage tables.
    - If a codex review was run, include its findings in the report.
    - Nits from the PR review can be listed briefly or omitted if the review is otherwise clean.
 
-6. If everything passes **and** the PR review verdict is APPROVE or COMMENT (no critical issues) **and** the security audit verdict is PASS **and** test coverage has no gaps on new code paths, update `.sno/state.json` phase to `ship`. Then tell the user: "Run `/sno:ship` to commit and ship."
+6. If everything passes **and** the PR review verdict is APPROVE or COMMENT (no critical issues) **and** the security audit verdict is PASS **and** the accessibility audit verdict is PASS **and** test coverage has no gaps on new code paths, update `.sno/state.json` phase to `ship`. Then tell the user: "Run `/sno:ship` to commit and ship."
 
-   If acceptance criteria pass but the PR review returns REQUEST CHANGES or the security audit returns FAIL, treat the critical issues as failures — do not advance to ship until they're resolved.
+   If acceptance criteria pass but the PR review returns REQUEST CHANGES, the security audit returns FAIL, or the accessibility audit returns FAIL, treat the critical issues as failures — do not advance to ship until they're resolved.
 
 **STOP.** Do not proceed to the ship phase. Do not start committing or shipping anything. Your job ends here — return control to the user. The next phase starts only when the user explicitly runs `/sno:ship`.
 
