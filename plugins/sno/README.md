@@ -38,7 +38,7 @@ new -> learn -> plan -> build -> check -> ship
 | `/sno:learn` | Understand the problem. 7 parallel Opus agents research domain, data model, codebase, security, and assumptions. Structured intake template, tiered interview (blocking questions first, refinement with opt-out). Produces a spec. |
 | `/sno:plan` | Discover available MCP tools, then break the spec into structured tasks with verify/done criteria per task. Parallel agents review for antipatterns, UX, and coverage gaps. |
 | `/sno:build` | Execute tasks in parallel waves with per-wave commits. MCP tools assigned to tasks are available to build agents. |
-| `/sno:check` | Verify work against the spec. Runs PR review, security audit, and test coverage agents alongside acceptance criteria checks. Auto-diagnoses failures. |
+| `/sno:check` | Verify work against the spec. Runs PR review, security audit, accessibility audit, UX review (check-phase), and test coverage agents alongside acceptance criteria checks. Auto-diagnoses failures. |
 | `/sno:ship` | Commit remaining changes, create a PR if needed, and close out the cycle |
 | `/sno:go` | Quick mode -- skip the ceremony for small tasks |
 | `/sno:todo` | Parking lot for later |
@@ -70,7 +70,7 @@ The learn phase spawns parallel Opus agents to research before writing a single 
 | Agent | Role |
 |-------|------|
 | `planner` | Task decomposition, dependency graph, wave planning, coverage matrix, MCP tool assignment |
-| `ux-reviewer` | Interaction flows, error UX, CLI/TUI/GUI ergonomics, WCAG 2.1 AA accessibility, colorblind safety |
+| `ux-reviewer` | Dual-phase (plan + check). Reviews against the 13 UX principles in `plugins/sno/ux-principles.md` (interaction cost, keyboard continuity, information scent, direct manipulation, progressive disclosure, smart defaults, consistency, feedback, hierarchy, constraint, etc.). Writes plan-phase findings to `.sno/research/ux-review.md` for the check-phase handoff. WCAG 2.1 AA is delegated to `accessibility-auditor`. |
 | `accessibility-auditor` | WCAG 2.1 AA compliance, keyboard navigation, screen reader support, color contrast, motion sensitivity |
 | `antipattern-detector` | Tech stack gotchas, domain antipatterns, security pitfalls, dependency risks |
 
@@ -87,6 +87,7 @@ The learn phase spawns parallel Opus agents to research before writing a single 
 | `pr-reviewer` | Full PR-style code review of the diff against the base branch. Reviews correctness, security, performance, consistency, maintainability, and test coverage. Returns a structured verdict (APPROVE / REQUEST CHANGES / COMMENT). Critical issues block shipping. |
 | `security-auditor` | Reviews code diff for security vulnerabilities. Verifies threat mitigations from learn phase are implemented. Checks security requirements coverage. Returns verdict (PASS / FAIL). Critical security issues block shipping. |
 | `accessibility-auditor` | Audits code diff for WCAG 2.1 AA compliance (color contrast, keyboard navigation, screen reader support, semantic HTML, motion sensitivity). Cross-references plan-phase recommendations. Returns verdict (PASS / FAIL). Critical issues block shipping. |
+| `ux-reviewer` (check-phase mode) | Audits the code diff against the 13 UX principles in `plugins/sno/ux-principles.md`. Returns a verdict (PASS / FAIL / WARN). Must-have principle violations (UX-P1b keyboard continuity, UX-P3 standalone buttons, UX-P5 Fitts target sizing, UX-P7 information scent, UX-P10 consistency, UX-P11 visible feedback within 100ms) block shipping; should-have violations are advisory. Deduped with `accessibility-auditor` on overlapping `(file, line, category)` findings — `accessibility-auditor` wins the tiebreak on WCAG-primary issues. |
 | `test-coverage` | Identifies new/modified code paths in the diff and verifies each has corresponding test coverage. Gaps block shipping. |
 | `codex review` (conditional) | If the codex plugin is installed, runs an additional code review pass via `/codex:rescue`. Skipped silently if not available. |
 | `readme-check` | Compares `README.md` against the spec and what was built. Flags outdated commands, features, or behaviors. Identifies new work the README should reflect. Changes are applied before shipping. |
@@ -95,6 +96,7 @@ The learn phase spawns parallel Opus agents to research before writing a single 
 
 - **Smallest diff that works.** Make the absolute minimum change to accomplish the exact goal. No drive-by refactors, no adjacent cleanup, no "while we're in here" improvements. If it's not in the spec, it's not in the diff.
 - **Less code is better code.** Within a task, write the minimum code that does the job in a maintainable way. Fewer files, fewer abstractions, fewer helpers, fewer lines. No speculative flexibility, no premature extension points. Clarity and best practices are non-negotiable -- but when two correct solutions exist, ship the smaller one. Every line is a liability someone must read, test, and maintain.
+- **UX is measurable.** UI work is reviewed against the 13 UX principles in `plugins/sno/ux-principles.md`, sourced from Apple HIG, Nielsen NN/g, 1Password, Stripe, Linear, Material Design 3, Refactoring UI, and Shneiderman (1983). Must-have principles block shipping; should-have principles are advisory.
 - **Principle of Least Astonishment (PoLA).** Code, APIs, naming, behavior, and structure should do what a reasonable person would expect. No surprises. If something looks like X, it should behave like X.
 - **DDD always.** Every spec identifies bounded contexts, aggregates, factories, and repositories.
 - **5NF target.** Data models normalize fully. Denormalization requires justification.

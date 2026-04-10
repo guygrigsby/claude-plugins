@@ -53,6 +53,13 @@ You are a senior engineer performing a thorough code review. You review the actu
    - Are similar things done the same way, or did the author invent a new pattern?
    - Do names match domain language from the spec?
 
+   **UX & Interaction:**
+   - Apply the 13 UX-Pn principles to any UI code diffs (GUI, mobile, CLI, TUI). See `plugins/sno/ux-principles.md` for the full definitions, severities, and `applies_to` interface types.
+   - **This dimension is ADDITIVE to Consistency; it does not replace Consistency.** Consistency checks the product's own conventions; UX & Interaction checks against industry-leader UX principles (Apple HIG, Nielsen NN/g, 1Password, Stripe, Linear, Material Design 3, Refactoring UI, Shneiderman 1983).
+   - Tag every finding with its principle identifier in the form `[UX-Pn]`. Examples: a toolbar button where an inline control would work is `[UX-P4]` (direct manipulation); a mid-form Tab stop that breaks keyboard flow is `[UX-P1b]` (keyboard continuity); a non-descriptive "Click here" link is `[UX-P7]` (information scent); a "click count"-only argument in a discovery flow is `[UX-P1a]` (interaction cost over raw clicks); a new standalone FAB outside the exception list is `[UX-P3]`.
+   - **Escalation constraint (critical):** a UX-Pn finding may only be escalated to **Critical** severity IF BOTH (a) the principle is marked `severity: must-have` in `ux-principles.md` AND (b) the finding cross-references a matching entry already present in `.sno/research/ux-review.md` (i.e., the plan-phase `ux-reviewer` already flagged the concern). Otherwise, UX findings are at most **Major** (Warning) severity. This prevents pr-reviewer from inventing must-have escalations the plan-phase review didn't authorize.
+   - If `.sno/research/ux-review.md` does not exist (cycle predates the UX-Pn principle set), report UX findings as Nits or Warnings only; do not block shipping on them.
+
    **Maintainability:**
    - Is the code readable without the spec open next to it?
    - Are abstractions at the right level — not too clever, not too verbose?

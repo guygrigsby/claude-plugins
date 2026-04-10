@@ -34,6 +34,14 @@ You are in the **check** phase of sno. Your goal is to verify the work.
 
    **Accessibility auditor agent** (`accessibility-auditor`) — also in parallel. Spawn with `subagent_type: "sno:accessibility-auditor"`. It audits the diff for WCAG 2.1 AA compliance — color contrast, keyboard navigation, screen reader support, semantic HTML, motion sensitivity. Cross-references accessibility requirements from the spec and recommendations from `.sno/research/accessibility.md` (if it exists from the plan phase). Returns a structured audit with critical issues, warnings, coverage tables, and a verdict (PASS / FAIL). Critical accessibility issues block shipping.
 
+   **UX reviewer agent** (`ux-reviewer`, check-phase mode) — also in parallel. Spawn with `subagent_type: "sno:ux-reviewer"` and instruct it to run in **check-phase mode**. It audits the code diff against the 13 UX principles in `plugins/sno/ux-principles.md`. Returns a verdict (PASS / FAIL / WARN). Must-have principle violations (UX-P1b, UX-P3, UX-P5, UX-P7, UX-P10, UX-P11) FAIL and block shipping. Should-have violations are advisory only. Cross-references `.sno/research/ux-review.md` (the plan-phase output file) to verify that check-phase findings trace back to plan-phase coverage. If `.sno/research/ux-review.md` does not exist (backward-compat: cycle predates the UX-Pn principle set), the reviewer downgrades all findings to advisory and does not block shipping.
+
+   **Deduper contract (ux-reviewer vs. accessibility-auditor).** Because both `ux-reviewer` and `accessibility-auditor` can surface overlapping findings (e.g., keyboard traps, focus indicators, tap-target sizes), their findings are deduplicated before the report is assembled:
+   - Findings are keyed on the tuple `(file, line, category)` where `category` is a short semantic tag such as `keyboard-trap`, `focus-indicator`, or `tap-target-size`.
+   - When both agents emit findings with the same `(file, line, category)` key, the **WCAG-primary** agent (`accessibility-auditor`) is the **primary owner** and wins the tiebreak — its finding is the canonical one shown in the report, and the `ux-reviewer` finding for that same key is suppressed so nothing double-fires.
+   - Non-overlapping findings from either agent pass through untouched. The deduper only collapses exact `(file, line, category)` collisions; similar-but-distinct issues are still reported independently.
+   - This deduplication prevents the double-fire bug identified in the plan's accessibility audit and keeps the check report crisp.
+
    **Test coverage agent** — also in parallel:
    - Identifies all new or modified code paths in the diff
    - Checks whether each code path has corresponding test coverage
@@ -55,6 +63,7 @@ You are in the **check** phase of sno. Your goal is to verify the work.
    - If a codex review was run, collect its findings alongside the PR review.
    - Collect the security audit verdict and any critical issues or warnings.
    - Collect the accessibility audit verdict and any critical issues or warnings.
+   - Collect the UX reviewer verdict (check-phase) and any must-have violations. Apply the deduper contract above before presenting findings so `(file, line, category)` collisions with `accessibility-auditor` are not double-reported.
    - Collect the test coverage assessment. Missing tests on new code paths are treated as critical issues — they block shipping, same as PR review critical issues.
    - If the README agent identified needed changes, apply them.
 
@@ -100,3 +109,4 @@ The STOP gate above does NOT apply when `--auto` is set. With `--auto`:
 - If everything passes and the PR review verdict is APPROVE or COMMENT, immediately advance to the ship phase and continue.
 - If something fails (criteria or PR review critical issues), run auto-diagnosis. If the fix is small (< 20 lines total), apply it directly. If larger, log the failures and fix plans in `.sno/todos.md` and advance to ship anyway — don't block.
 - PR review warnings are logged but don't block in `--auto` mode.
+- Under `--auto`, a FAIL verdict from `ux-reviewer` check-phase on any **must-have** UX principle (UX-P1b, UX-P3, UX-P5, UX-P7, UX-P10, UX-P11) halts the cycle with the same hard-block semantics as security and accessibility failures — auto-diagnosis runs, and if the fix is not small enough to apply inline the cycle stops rather than advancing to ship. Should-have UX findings from `ux-reviewer` are logged to `.sno/todos.md` but do not block under `--auto`.

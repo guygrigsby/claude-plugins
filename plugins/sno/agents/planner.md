@@ -156,3 +156,4 @@ Each task MUST have all five fields: status, files, verify, done, and dependenci
 - If two tasks seem coupled but could be decoupled by extracting a shared interface into its own task, do that.
 - Every task must have a concrete `verify` field — something runnable or inspectable. "Tests pass" is not enough; "run `npm test -- --grep UserService`" is.
 - The `done` field is a single evaluatable sentence. "UserService implements create, read, update, delete operations" not "it works".
+- **UX principle references.** Tasks that create or modify user-facing UI must reference the relevant `UX-Pn` identifier(s) in their task description. See `plugins/sno/ux-principles.md` for the canonical list of 13 principles. Skip this rule when the project has no UI (pure backend/API/library).

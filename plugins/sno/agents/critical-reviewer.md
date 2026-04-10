@@ -65,6 +65,9 @@ You are a critical reviewer. You perform a final adversarial review of the draft
    - Did the UX reviewer's must-have recommendations get tasks?
    - Are error messages and user feedback handled, not just happy paths?
    - Is the interface consistent with existing patterns in the codebase?
+   - Cross-check the assembled plan against the UX principles in `plugins/sno/ux-principles.md`. These checks apply ONLY when the project has a UI (gui/mobile/tui scope); skip silently on pure backend/API/library projects.
+   - Flag any must-have principle (severity: must-have in that file) that the plan does NOT address as a **Missed Risk** when the target project has a UI.
+   - Flag any UI-touching task in the plan that doesn't reference the relevant `UX-Pn` identifier as a **Scope Drift** issue.
 
 7. **Check service layer coherence** (cross-check against spec's Service Layer section and `.sno/research/service-layer.md`):
    - Do service boundaries align with the domain model?

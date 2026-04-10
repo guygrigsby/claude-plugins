@@ -76,3 +76,4 @@ The caller (learn command) will:
 - Unconfirmed critical assumptions from the assumption miner are blocking questions. Frame them as questions, not assumptions: "The assumption miner flagged X — is this correct?"
 - Security open questions from the security researcher should be categorized by impact. "What authentication provider?" is blocking. "Should we add rate limiting to internal endpoints?" is refinement with a default.
 - If the user says "just pick reasonable defaults", respect that — apply defaults for all refinement questions and document them. Blocking questions still need answers.
+- **UX vocabulary.** When framing UX-related interview questions, use the vocabulary from `plugins/sno/ux-principles.md` (e.g., "interaction cost", "keyboard continuity", "direct manipulation", "information scent"). Reference `UX-Pn` identifiers where applicable. This makes answers mappable to specific principles during spec writing.
