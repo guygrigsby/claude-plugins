@@ -59,7 +59,7 @@ The plan phase discovers available MCP tools, then spawns parallel Opus agents a
 
 **Wave 1 (parallel):**
 - `planner` -- task decomposition, dependency graph, wave planning, coverage matrix, MCP tool assignment
-- `ux-reviewer` -- interaction flows, error UX, CLI/TUI/GUI ergonomics
+- `ux-reviewer` -- dual-phase (plan + check). Reviews against the 13 UX principles in `plugins/sno/ux-principles.md`. Writes plan-phase findings to `.sno/research/ux-review.md` for the check-phase handoff. WCAG 2.1 AA is delegated to `accessibility-auditor`.
 - `accessibility-auditor` -- WCAG 2.1 AA compliance, keyboard navigation, screen reader support, color contrast, motion sensitivity
 - `antipattern-detector` -- tech stack gotchas, domain antipatterns, security pitfalls, dependency risks
 
@@ -73,6 +73,7 @@ The check phase spawns agents in parallel alongside the acceptance criteria veri
 - `pr-reviewer` -- full PR-style code review of the diff against the base branch. Reviews correctness, security, performance, consistency, maintainability, and test coverage. Missing tests on new code paths are a critical (shipping-blocking) issue. Returns a structured review with verdict (APPROVE / REQUEST CHANGES / COMMENT). Critical issues block shipping.
 - `security-auditor` -- reviews code diff for security vulnerabilities, verifies threat mitigations from learn phase are implemented, checks security requirements coverage. Returns verdict (PASS / FAIL). Critical security issues block shipping.
 - `accessibility-auditor` -- audits code diff for WCAG 2.1 AA compliance (color contrast, keyboard navigation, screen reader support, semantic HTML, motion sensitivity). Cross-references plan-phase recommendations from `.sno/research/accessibility.md`. Returns verdict (PASS / FAIL). Critical accessibility issues block shipping.
+- `ux-reviewer` (check-phase mode) -- audits the code diff against the 13 UX principles in `plugins/sno/ux-principles.md`. Returns verdict (PASS / FAIL / WARN). Must-have principle violations (UX-P1b, UX-P3, UX-P5, UX-P7, UX-P10, UX-P11) block shipping; should-have violations are advisory. Cross-references `.sno/research/ux-review.md` from the plan phase. Deduped with `accessibility-auditor` on overlapping `(file, line, category)` findings — `accessibility-auditor` wins the tiebreak on WCAG-primary issues.
 - `test-coverage` -- identifies new/modified code paths in the diff and verifies each has corresponding test coverage. Gaps block shipping.
 - `codex review` (conditional) -- if the codex plugin is installed, runs an additional code review pass via `/codex:rescue`. Skipped silently if not available.
 

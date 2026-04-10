@@ -36,7 +36,6 @@ Sources.
 1. [Linear — How we redesigned the Linear UI (Part II)](https://linear.app/now/how-we-redesigned-the-linear-ui) — archived snapshot: <https://web.archive.org/web/2026/https://linear.app/now/how-we-redesigned-the-linear-ui>
 2. [Stripe — Payment HTML forms: Best practices for conversion](https://stripe.com/resources/more/payment-html-forms) — archived snapshot: <https://web.archive.org/web/2026/https://stripe.com/resources/more/payment-html-forms>
 3. [W3C WCAG 2.1.1 Keyboard (Level A)](https://www.w3.org/WAI/WCAG21/Understanding/keyboard.html) — archived snapshot: <https://web.archive.org/web/2026/https://www.w3.org/WAI/WCAG21/Understanding/keyboard.html>
-4. [Nielsen Norman Group — Fitts's Law and Its Applications in UX](https://www.nngroup.com/articles/fitts-law/) — archived snapshot: <https://web.archive.org/web/2026/https://www.nngroup.com/articles/fitts-law/>
 
 ## Principles
 
