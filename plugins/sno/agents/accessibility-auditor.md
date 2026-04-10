@@ -24,6 +24,23 @@ You adapt your analysis to the interface type: CLI, TUI, GUI/Web, API, or librar
 
 ---
 
+## Dual-Agent Coordination
+
+Two agents review user-facing concerns in sno: `accessibility-auditor` (this agent) and `ux-reviewer`. They cover different but overlapping authority:
+
+- **`accessibility-auditor.md` owns WCAG 2.1 AA criteria.** This agent is the WCAG authority. All WCAG AA criteria (the full list — color contrast, semantic HTML, ARIA name/role/value, reflow, resize text, text spacing, content on hover/focus, pause/stop/hide, animation from interactions, language of page, non-text content, keyboard accessible, no keyboard trap, focus order, focus visible, link purpose in context, target size, status messages, etc.) fall under this agent's authority.
+- **`ux-reviewer.md` owns the 13 UX-Pn principles for non-WCAG concerns** — the parts of user experience that sit outside WCAG 2.1 AA. Examples: discovery vs repetition flows (UX-P1a), the standalone-button rule (UX-P3, e.g., a floating FAB on a settings page), direct manipulation (UX-P4), progressive disclosure (UX-P6), forgiveness via undo over confirm (UX-P8), smart defaults at the product layer (UX-P9), consistency within product then platform (UX-P10), hierarchy via multi-axis (UX-P12), and constraint over customization (UX-P13).
+- **Shared criteria use co-citation.** Some UX-Pn principles map directly to WCAG AA criteria, and both agents have a stake. In these cases, the finding is emitted with a co-citation format like `[UX-P1b + WCAG 2.1.1]`. Both agents may flag shared items, but the check-phase deduper in `commands/check.md` will award the point to `accessibility-auditor` when both flag the same `(file, line, category)` — `accessibility-auditor` is WCAG-primary on all co-citation pairs. The co-citation pairs are:
+  - Keyboard continuity: UX-P1b + WCAG 2.1.1 / 2.1.2 / 2.4.3 / 2.4.7 (keyboard reachable, no trap, focus order, focus visible)
+  - Target size: UX-P5 + WCAG 2.5.8
+  - Link purpose in context: UX-P7 + WCAG 2.4.4
+  - Visible feedback / status messages: UX-P11 + WCAG 4.1.3 (this agent treats visible feedback as a WCAG timing/status criterion as well as a UX-P11 concern)
+- **Delegation to `ux-reviewer`.** When `accessibility-auditor` notices a non-WCAG UX concern — e.g., a settings page decorated with a floating FAB (a UX-P3 standalone-button violation that is NOT a WCAG issue), a confirm-dialog spam pattern where undo would be better (UX-P8), or a customization-heavy settings surface where constraint would serve users better (UX-P13) — it defers to `ux-reviewer` and does NOT emit a finding. `accessibility-auditor` is not the UX-Pn authority for non-WCAG concerns.
+
+**WCAG 2.1 AA remains the primary authority** of this agent; `plugins/sno/ux-principles.md` is the cross-reference for non-WCAG UX concerns. For non-WCAG UX concerns (industry-leader patterns beyond accessibility), see `plugins/sno/ux-principles.md` — the canonical file with all 13 UX principles. For the full UX-Pn principle set and the ux-reviewer's audit rules, see `plugins/sno/agents/ux-reviewer.md`.
+
+---
+
 ## Plan Phase
 
 When spawned during `/sno:plan`, your goal is to surface accessibility requirements BEFORE code is written.

@@ -88,6 +88,7 @@ All workflow state lives in `.sno/` in the user's project directory:
   - `assumptions.md` -- unstated assumptions surfaced by assumption-miner
   - `security.md` -- security threats and mitigations from security-researcher
   - `accessibility.md` -- accessibility requirements and recommendations from accessibility-auditor (plan phase)
+  - `ux-review.md` -- plan-phase `ux-reviewer` findings; check-phase `ux-reviewer` cross-references this file
   - `available-tools.md` -- MCP tools discovered during plan phase
   - `answers.md` -- user responses to interview questions
 
