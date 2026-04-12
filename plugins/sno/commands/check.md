@@ -112,6 +112,13 @@ You are in the **check** phase of sno. Your goal is to verify the work.
 The STOP gate above does NOT apply when `--auto` is set. With `--auto`:
 - Run all checks (including PR review) and update the README without pausing.
 - If everything passes and the PR review verdict is APPROVE or COMMENT, **skip the `/clear` handoff** (a single run cannot clear its own context mid-execution) and immediately advance to the ship phase.
-- If something fails (criteria or PR review critical issues), run auto-diagnosis. If the fix is small (< 20 lines total), apply it directly. If larger, log the failures and fix plans in `.sno/todos.md` and advance to ship anyway — don't block.
-- PR review warnings are logged but don't block in `--auto` mode.
-- Under `--auto`, a FAIL verdict from `ux-reviewer` check-phase on any **must-have** UX principle (UX-P1b, UX-P3, UX-P5, UX-P7, UX-P10, UX-P11) halts the cycle with the same hard-block semantics as security and accessibility failures — auto-diagnosis runs, and if the fix is not small enough to apply inline the cycle stops rather than advancing to ship. Should-have UX findings from `ux-reviewer` are logged to `.sno/todos.md` but do not block under `--auto`.
+- **Blockers must be fixed.** If any of the following fail, run auto-diagnosis and apply the fix regardless of size. Do not skip blockers, do not log them as todos — fix them:
+  - Security audit FAIL
+  - Accessibility audit FAIL
+  - Must-have UX principle violations (UX-P1b, UX-P3, UX-P5, UX-P7, UX-P10, UX-P11)
+  - Missing test coverage on new code paths
+  - PR review REQUEST CHANGES with critical issues
+  - Failing acceptance criteria
+- After applying a blocker fix, re-run only the affected check(s) to confirm the fix resolved the issue. If a fix attempt fails, try once more with a different approach. If it still fails, halt the cycle — do not advance to ship with unresolved blockers.
+- **Non-blockers go to todo.** PR review warnings, should-have UX findings, and non-critical suggestions are logged as GitHub issues via `/sno:todo` (which auto-detects GitHub availability). If GitHub is unavailable, fall back to `.sno/todos.md`. Either way, keep moving — these do not block.
+- Advance to ship once all blockers are resolved.

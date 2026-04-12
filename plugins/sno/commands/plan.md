@@ -143,8 +143,8 @@ Each task must have all five fields: status, files, verify, done, and dependenci
 ## --auto flag
 
 The STOP gate above does NOT apply when `--auto` is set. With `--auto`:
-- Still present open questions (step 4) — these MUST be answered even in auto mode, since guessing leads to rework.
+- In step 4, pick reasonable defaults for all open questions from agents. Document each as `(auto-defaulted)` in the plan. Do not pause for user input.
+- In step 6, if the critical reviewer returns NEEDS REVISION, incorporate its recommended changes automatically and re-run the reviewer (still capped at 2 rounds). If issues remain after 2 rounds, log the unresolved concerns as `(unresolved-concern)` in the plan and proceed — don't block.
 - Skip the review loop (step 8) **and skip the `/clear` handoff** — a single run cannot clear its own context mid-execution. Write the plan and immediately advance to the build phase. Continue through remaining phases in the current context.
 - Tool discovery (step 2), all parallel agents (step 3), and critical review (step 6) still run — never skip analysis.
 - Coverage verification (step 7) still runs — never skip it.
-- If no agents have open questions, proceed directly to writing the plan and advancing.

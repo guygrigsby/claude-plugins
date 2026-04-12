@@ -30,7 +30,10 @@ You are in the **ship** phase of sno. Your goal is to ship the work.
 4. **Close the cycle**:
    - Update `.sno/state.json` phase to `done`.
    - Tell the user the cycle is complete.
-   - If there are items in `.sno/todos.md`, mention them: "You have N items in the todo list for next time."
+   - Check for outstanding todo items in both places:
+     - GitHub: `gh issue list --label "sno:todo" --state open` (if `gh` is available)
+     - Local: `.sno/todos.md`
+   - If there are items in either, mention them: "You have N items in the todo list for next time." Include the GitHub issue list URL if applicable.
 
 ## Rules
 - On `sno/` branches, push and create a PR to main automatically — no confirmation needed.

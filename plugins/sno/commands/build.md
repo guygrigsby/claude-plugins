@@ -79,5 +79,6 @@ If the plan identifies bottleneck tasks (tasks with the most downstream dependen
 
 The STOP gate above does NOT apply when `--auto` is set. With `--auto`:
 - Execute all waves without pausing between them (same as "just do it all").
-- If an agent returns with a problem, attempt a reasonable fix once. If that fails, log the problem in `.sno/todos.md` and continue with remaining tasks.
+- If an agent returns with a problem, attempt a reasonable fix once. If that fails, log the problem as a GitHub issue via `/sno:todo` (which auto-detects GitHub availability; falls back to `.sno/todos.md` if unavailable) and continue with remaining tasks.
+- If you discover something not in the plan, log it via `/sno:todo` and keep going — don't stop to ask.
 - When all tasks are done, **skip the `/clear` handoff** (a single run cannot clear its own context mid-execution) and immediately advance to the check phase. Continue through remaining phases in the current context.
