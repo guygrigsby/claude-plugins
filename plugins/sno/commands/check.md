@@ -13,7 +13,14 @@ You are in the **check** phase of sno. Your goal is to verify the work.
 
 1. Read `.sno/spec.md` and `.sno/plan.md`.
 
-2. **Check acceptance criteria and review code in parallel.** Spawn the following agents simultaneously (via Agent tool):
+2. **Run the local test suite.** Before spawning review agents, detect and run the project's test runner:
+   - Look for signals: `package.json` (scripts.test), `Makefile` (test target), `go.mod` (Go), `pytest.ini`/`pyproject.toml`/`setup.cfg` (Python), `Cargo.toml` (Rust), `build.gradle`/`pom.xml` (JVM), or other standard test config files in the project root.
+   - Run the appropriate command (e.g., `npm test`, `go test ./...`, `pytest`, `cargo test`, `make test`). If multiple test runners exist, run all of them.
+   - If no test runner is detected, note it and move on — don't block the check phase, but flag it in the report.
+   - If tests fail, collect the failure output. Test failures are **blockers** — they must be resolved before shipping, same as PR review critical issues.
+   - Run this step concurrently with the agents in step 3 (it's independent work).
+
+3. **Check acceptance criteria and review code in parallel.** Spawn the following agents simultaneously (via Agent tool):
 
    **Verification agents** — one per criterion in the spec's "Done when" section. Each agent gets:
    - The specific criterion to verify
@@ -57,7 +64,8 @@ You are in the **check** phase of sno. Your goal is to verify the work.
 
    If there are only 1-2 criteria, check them directly instead of spawning agents — but always spawn the PR reviewer regardless.
 
-3. **Collect results and update README.** Once all agents return:
+4. **Collect results and update README.** Once all agents and the test suite return:
+   - Collect the local test suite results. If any tests failed, record them as blockers.
    - Collect pass/fail results from verification agents.
    - Collect the PR review verdict and any critical issues or warnings.
    - If a codex review was run, collect its findings alongside the PR review.
@@ -67,9 +75,10 @@ You are in the **check** phase of sno. Your goal is to verify the work.
    - Collect the test coverage assessment. Missing tests on new code paths are treated as critical issues — they block shipping, same as PR review critical issues.
    - If the README agent identified needed changes, apply them.
 
-4. **Adversarial re-check.** After the initial pass, assume at least one criterion you marked as passing has a subtle gap. Re-check each passing criterion with adversarial intent — look for the 80% implementation (where the happy path works but edge cases don't).
+5. **Adversarial re-check.** After the initial pass, assume at least one criterion you marked as passing has a subtle gap. Re-check each passing criterion with adversarial intent — look for the 80% implementation (where the happy path works but edge cases don't).
 
-5. **Report results** to the user:
+6. **Report results** to the user:
+   - Show the local test suite results first: pass/fail, number of tests run, and failure details if any.
    - List each criterion with pass/fail.
    - If something fails, explain what's wrong and suggest a fix.
    - Show the PR review summary: verdict, critical issues, and warnings. Include file:line references.
@@ -78,7 +87,7 @@ You are in the **check** phase of sno. Your goal is to verify the work.
    - If a codex review was run, include its findings in the report.
    - Nits from the PR review can be listed briefly or omitted if the review is otherwise clean.
 
-6. If everything passes **and** the PR review verdict is APPROVE or COMMENT (no critical issues) **and** the security audit verdict is PASS **and** the accessibility audit verdict is PASS **and** test coverage has no gaps on new code paths, update `.sno/state.json` phase to `ship`. Then tell the user, verbatim:
+7. If everything passes **and** the local test suite passes **and** the PR review verdict is APPROVE or COMMENT (no critical issues) **and** the security audit verdict is PASS **and** the accessibility audit verdict is PASS **and** test coverage has no gaps on new code paths, update `.sno/state.json` phase to `ship`. Then tell the user, verbatim:
 
    > Check phase complete. The ship phase reads the spec and git state directly, so conversation history is no longer needed. Start the ship phase with a clean context:
    >
@@ -89,7 +98,7 @@ You are in the **check** phase of sno. Your goal is to verify the work.
 
 **STOP.** Do not proceed to the ship phase. Do not start committing or shipping anything. Your job ends here — return control to the user. The next phase starts only when the user explicitly runs `/sno:ship` (after `/clear`).
 
-7. If something fails (criteria or PR review critical issues), **auto-diagnose**:
+8. If something fails (criteria, test failures, or PR review critical issues), **auto-diagnose**:
    - For each failing criterion **and** each PR review critical issue, spawn a **debug agent per failure in parallel** (via Agent tool). Each gets:
      - The failing criterion or critical issue (with file:line from the PR review)
      - The relevant code files
@@ -113,6 +122,7 @@ The STOP gate above does NOT apply when `--auto` is set. With `--auto`:
 - Run all checks (including PR review) and update the README without pausing.
 - If everything passes and the PR review verdict is APPROVE or COMMENT, **skip the `/clear` handoff** (a single run cannot clear its own context mid-execution) and immediately advance to the ship phase.
 - **Blockers must be fixed.** If any of the following fail, run auto-diagnosis and apply the fix regardless of size. Do not skip blockers, do not log them as todos — fix them:
+  - Local test suite failures
   - Security audit FAIL
   - Accessibility audit FAIL
   - Must-have UX principle violations (UX-P1b, UX-P3, UX-P5, UX-P7, UX-P10, UX-P11)
