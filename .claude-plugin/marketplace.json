@@ -9,31 +9,19 @@
       "name": "sno",
       "description": "Straightforward spec-driven development. Learn, plan, build, check, ship.",
       "version": "1.24.0",
-      "source": {
-        "source": "git-subdir",
-        "url": "https://github.com/guygrigsby/claude-plugins.git",
-        "path": "plugins/sno"
-      }
+      "source": "./plugins/sno"
     },
     {
       "name": "wu",
       "description": "Zero-slop development with persona-driven analysis and cloud-first agent dispatch.",
       "version": "0.1.0",
-      "source": {
-        "source": "git-subdir",
-        "url": "https://github.com/guygrigsby/claude-plugins.git",
-        "path": "plugins/wu"
-      }
+      "source": "./plugins/wu"
     },
     {
       "name": "my-voice",
       "description": "Build a personal writing-voice corpus from email, blog, and GitHub PR/review history; distill it into a style guide; draft new text in your own voice.",
       "version": "0.1.0",
-      "source": {
-        "source": "git-subdir",
-        "url": "https://github.com/guygrigsby/claude-plugins.git",
-        "path": "plugins/my-voice"
-      }
+      "source": "./plugins/my-voice"
     }
   ]
 }
