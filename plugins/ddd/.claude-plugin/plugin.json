@@ -1,0 +1,9 @@
+{
+  "name": "ddd",
+  "version": "0.1.0",
+  "description": "Domain-driven design for large changes. Bounded contexts, ubiquitous language, aggregates and invariants, and anti-corruption layers, captured as artifacts before code.",
+  "author": {
+    "name": "Guy J Grigsby"
+  },
+  "license": "MIT"
+}

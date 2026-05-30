@@ -22,6 +22,12 @@
       "description": "Build a personal writing-voice corpus from email, blog, and GitHub PR/review history; distill it into a style guide; draft new text in your own voice.",
       "version": "0.1.0",
       "source": "./plugins/my-voice"
+    },
+    {
+      "name": "ddd",
+      "description": "Domain-driven design for large changes. Bounded contexts, ubiquitous language, aggregates and invariants, and anti-corruption layers, captured as artifacts before code.",
+      "version": "0.1.0",
+      "source": "./plugins/ddd"
     }
   ]
 }
