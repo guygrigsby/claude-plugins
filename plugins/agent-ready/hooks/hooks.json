@@ -1,0 +1,29 @@
+{
+  "description": "agent-ready: advisory line-budget check on writes and context-drift check at session start. Thresholds and warn/block live in .claude/agent-ready.local.md.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/check-file-size.js\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/check-context-drift.js\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

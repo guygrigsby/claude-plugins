@@ -28,6 +28,12 @@
       "description": "Domain-driven design for large changes. Bounded contexts, ubiquitous language, aggregates and invariants, and anti-corruption layers, captured as artifacts before code.",
       "version": "0.1.0",
       "source": "./plugins/ddd"
+    },
+    {
+      "name": "agent-ready",
+      "description": "Keep a repo optimized for coding agents. Audits seven agent-ergonomics dimensions, auto-fixes the safe class, and enforces line budget + context drift via hooks.",
+      "version": "0.1.0",
+      "source": "./plugins/agent-ready"
     }
   ]
 }

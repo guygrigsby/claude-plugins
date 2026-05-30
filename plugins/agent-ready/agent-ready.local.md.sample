@@ -1,0 +1,32 @@
+---
+# agent-ready config. Copy to .claude/agent-ready.local.md in your repo and tune.
+# All keys are optional; omitted keys use the defaults shown.
+
+# Max lines before the file-size hook reacts.
+line_budget: 400
+
+# What the PreToolUse file-size hook does when a file is over budget:
+#   warn  - advisory note, never blocks (default)
+#   block - deny the write/edit until the file is split
+#   off   - do nothing
+file_size_rule: warn
+
+# How many commits since CLAUDE.md/AGENTS.md were last touched before the
+# SessionStart hook calls the context files stale.
+context_drift_commits: 15
+
+# Paths excluded from the file-size check (minimal ** / * globs).
+ignore:
+  - "**/node_modules/**"
+  - "**/vendor/**"
+  - "**/dist/**"
+  - "**/build/**"
+  - "**/*.min.js"
+  - "**/*.gen.go"
+  - "**/*.pb.go"
+---
+
+# agent-ready (local config)
+
+This file configures the `agent-ready` plugin for this repo. The YAML frontmatter
+above is what the hooks read; this body is just notes for humans.

@@ -22,6 +22,7 @@ Then install individual plugins:
 | [wu](plugins/wu/) | Zero-slop development with persona-driven analysis and cloud-first agent dispatch. |
 | [my-voice](plugins/my-voice/) | Build a personal writing-voice corpus, distill it into a style guide, draft new text in your own voice. |
 | [ddd](plugins/ddd/) | Domain-driven design for large changes. Models bounded contexts, ubiquitous language, aggregates/invariants, and anti-corruption layers before code. |
+| [agent-ready](plugins/agent-ready/) | Keep a repo optimized for coding agents. Audits seven agent-ergonomics dimensions, auto-fixes safe items, and enforces line budget + context drift via hooks. |
 
 ## Adding a Plugin
 

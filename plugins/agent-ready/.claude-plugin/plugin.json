@@ -1,0 +1,9 @@
+{
+  "name": "agent-ready",
+  "version": "0.1.0",
+  "description": "Keep a repo optimized for coding agents. Audits seven agent-ergonomics dimensions (progressive disclosure, context files, file focus, boundaries, verification, ambiguity, discoverability), auto-fixes the safe class, and enforces line budget + context drift via hooks.",
+  "author": {
+    "name": "Guy J Grigsby"
+  },
+  "license": "MIT"
+}
