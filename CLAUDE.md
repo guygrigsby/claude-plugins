@@ -23,9 +23,10 @@ plugins/
 ## Adding a New Plugin
 
 1. Create `plugins/<name>/` with a `.claude-plugin/plugin.json`
-2. Add commands in `plugins/<name>/commands/` and agents in `plugins/<name>/agents/`
+2. Add commands in `plugins/<name>/commands/` and agents in `plugins/<name>/agents/` (or `skills/` for a skill plugin)
 3. Add an entry to `.claude-plugin/marketplace.json` with `git-subdir` source pointing to `plugins/<name>`
 4. Add a `CLAUDE.md` in the plugin directory describing the plugin
+5. **Always update both plugin lists in the same commit:** the table in the root `README.md` AND the `## Plugins` list at the bottom of this `CLAUDE.md`. A new plugin isn't done until it appears in both. When in doubt, grep the root docs for an existing plugin name and add the new one everywhere that name shows up.
 
 ## Versioning
 
@@ -40,3 +41,5 @@ If these drift, users install a stale version. Any commit that bumps one must bu
 
 - **[sno](plugins/sno/CLAUDE.md)** -- spec-driven development loop (learn, plan, build, check, ship)
 - **[wu](plugins/wu/CLAUDE.md)** -- zero-slop development with persona-driven analysis and cloud-first dispatch
+- **[my-voice](plugins/my-voice/CLAUDE.md)** -- personal writing-voice corpus, style-guide distillation, and voiced drafting
+- **[ddd](plugins/ddd/CLAUDE.md)** -- domain-driven design for large changes (bounded contexts, ubiquitous language, aggregates/invariants, anti-corruption layers) before code
