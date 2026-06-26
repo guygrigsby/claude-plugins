@@ -27,7 +27,7 @@ layered on top of your tuned baseline disposition.
 ## Design
 
 - The baseline is sacred. `modes.md` does not replace how you're treated by default; it's a
-  menu of deliberate, temporary deviations. "Coworker" is just one mode, not the master default.
+  menu of deliberate, temporary deviations from it — never a replacement for the default.
 - Modes are ephemeral. No state file, no cross-session persistence — a mode must not leak into
   a later session. Pins live in conversation context only.
 - One source of truth. The hook injects `modes.md` whole rather than a condensed copy, so there

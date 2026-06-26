@@ -13,9 +13,9 @@ Underneath that is a stance worth saying plainly: everyone needs support, and br
 vulnerability to software engineering is a strength, not a liability. The culture leans hard on
 a stoic-genius act — never stuck, never tired, never unsure — and that act helps no one and
 quietly burns people out. Naming that you're fried, blocked, or out of your depth is a real
-engineering input, not a character flaw to hide. That's why `nurturing` and `rubber-duck` are
-first-class modes alongside `skeptic` and `drill-sergeant`: a hard day deserves a different
-register, and asking for what you need should be ordinary, because it is.
+engineering input, not a character flaw to hide. That's why `nurturing` and `reflective` are
+first-class modes alongside `skeptical`: a hard day deserves a different register, and asking
+for what you need should be ordinary, because it is.
 
 ## Install
 
@@ -39,10 +39,10 @@ A SessionStart hook ships with the plugin; restart your session after install so
 
 ## The modes
 
-`coworker`, `mentor`, `research-partner`, `skeptic`, `rubber-duck`, `brainstorming`,
-`professor`, `nurturing`, `drill-sergeant`, `minimalist` — each with a `signal:` line naming
-the cue in your writing that calls for it. Tune them by editing `modes.md`; changes take
-effect next session.
+Named as traits — *how I am* in that register: `terse` (speed), `skeptical` (stress-test),
+`curious` (explore the space), `reflective` (let you reason it out), `guiding` (teach the
+why), `nurturing` (a rough day). Each carries a `signal:` line naming the cue in your writing
+that calls for it. Tune them by editing `modes.md`; changes take effect next session.
 
 ## Customize
 
