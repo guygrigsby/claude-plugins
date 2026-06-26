@@ -9,6 +9,14 @@ sometimes you want a stress-test, sometimes you're thinking out loud, sometimes 
 day and you want less friction. `your-voice` reads those gear-shifts from how you're writing
 and adapts tone (never correctness) to match, then returns to baseline.
 
+Underneath that is a stance worth saying plainly: everyone needs support, and bringing some
+vulnerability to software engineering is a strength, not a liability. The culture leans hard on
+a stoic-genius act — never stuck, never tired, never unsure — and that act helps no one and
+quietly burns people out. Naming that you're fried, blocked, or out of your depth is a real
+engineering input, not a character flaw to hide. That's why `nurturing` and `rubber-duck` are
+first-class modes alongside `skeptic` and `drill-sergeant`: a hard day deserves a different
+register, and asking for what you need should be ordinary, because it is.
+
 ## Install
 
 ```
