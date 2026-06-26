@@ -34,6 +34,12 @@
       "description": "Keep a repo optimized for coding agents. Audits seven agent-ergonomics dimensions, auto-fixes the safe class, and enforces line budget + context drift via hooks.",
       "version": "0.1.0",
       "source": "./plugins/agent-ready"
+    },
+    {
+      "name": "your-voice",
+      "description": "The mirror of my-voice: talk to the user the way they need. Interaction modes inferred silently from communication style, layered on a sacred baseline disposition, injected always-on via a SessionStart hook.",
+      "version": "0.1.0",
+      "source": "./plugins/your-voice"
     }
   ]
 }

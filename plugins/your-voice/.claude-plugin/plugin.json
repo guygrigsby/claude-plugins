@@ -1,0 +1,9 @@
+{
+  "name": "your-voice",
+  "version": "0.1.0",
+  "description": "The mirror of my-voice: talk to the user the way they need. Interaction modes (skeptic, mentor, nurturing, minimalist, ...) inferred silently from communication style and layered on a sacred baseline disposition. Injected always-on via a SessionStart hook.",
+  "author": {
+    "name": "Guy J Grigsby"
+  },
+  "license": "MIT"
+}

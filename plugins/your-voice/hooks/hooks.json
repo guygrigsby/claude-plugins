@@ -1,0 +1,17 @@
+{
+  "description": "your-voice: inject the interaction-mode framework as always-on context at session start.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/your-voice-activate.sh\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}
