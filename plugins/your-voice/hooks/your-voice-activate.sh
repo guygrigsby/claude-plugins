@@ -19,6 +19,18 @@ inference until I release it.
 
 EOF
 
-# ponytail: cat the whole file — small, and keeping one source of truth beats a
-# second condensed copy that would drift. Trim to a digest only if token cost bites.
-cat "$MODES"
+# Always-on = routing layer only: header, core principles, and each mode's
+# name/tagline/signal. The trait bullets are progressive-disclosure — read them
+# from modes.md when a mode actually fires. One source of truth: derive the digest
+# by filtering modes.md, never a second copy that would drift.
+# ponytail: awk skips `* ` trait bullets inside the Modes section; Core Principles
+# bullets (before `## Modes`) stay. Switch to a parser only if the format grows.
+awk '/^## Modes/ {inmodes=1} inmodes && /^\* / {next} {print}' "$MODES"
+
+cat <<EOF
+
+---
+The bullets above are signals only. When a mode fits, read its trait bullets from
+\`$MODES\` (§ the matching \`###\` heading) before adopting it — the signal selects
+the mode, the bullets are how you execute it.
+EOF

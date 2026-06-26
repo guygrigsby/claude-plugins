@@ -30,7 +30,10 @@ layered on top of your tuned baseline disposition.
   menu of deliberate, temporary deviations from it — never a replacement for the default.
 - Modes are ephemeral. No state file, no cross-session persistence — a mode must not leak into
   a later session. Pins live in conversation context only.
-- One source of truth. The hook injects `modes.md` whole rather than a condensed copy, so there
-  is nothing to drift. Trim to a digest only if token cost ever bites.
+- One source of truth, progressive disclosure. The hook injects only the routing layer
+  (header, core principles, each mode's name/tagline/`signal:`) as always-on context; the
+  per-mode trait bullets stay in `modes.md` and are read on demand when a mode fires. The
+  digest is *derived* by filtering `modes.md` (awk drops the trait bullets), never a second
+  copy — so there is nothing to drift. Signals select the mode; the deferred bullets execute it.
 - Never edits your personal `~/.claude/CLAUDE.md`. The always-on footprint is delivered by the
   plugin's own hook.
