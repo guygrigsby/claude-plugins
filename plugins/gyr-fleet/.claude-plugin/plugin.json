@@ -1,0 +1,9 @@
+{
+  "name": "gyr-fleet",
+  "version": "0.1.0",
+  "description": "Register each Claude Code session in the gyr fleet: heartbeat on session start and every prompt, mark done on session end. Best-effort via the local gyr CLI; never blocks a session.",
+  "author": {
+    "name": "Guy J Grigsby"
+  },
+  "license": "MIT"
+}

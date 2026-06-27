@@ -40,6 +40,12 @@
       "description": "The mirror of my-voice: talk to the user the way they need. Interaction modes inferred silently from communication style, layered on a sacred baseline disposition, injected always-on via a SessionStart hook.",
       "version": "0.1.0",
       "source": "./plugins/your-voice"
+    },
+    {
+      "name": "gyr-fleet",
+      "description": "Register each Claude Code session in the gyr fleet: heartbeat on session start and every prompt, mark done on session end. Best-effort via the local gyr CLI; never blocks a session.",
+      "version": "0.1.0",
+      "source": "./plugins/gyr-fleet"
     }
   ]
 }

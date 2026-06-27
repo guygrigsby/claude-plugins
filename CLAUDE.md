@@ -45,3 +45,4 @@ If these drift, users install a stale version. Any commit that bumps one must bu
 - **[ddd](plugins/ddd/CLAUDE.md)** -- domain-driven design for large changes (bounded contexts, ubiquitous language, aggregates/invariants, anti-corruption layers) before code
 - **[agent-ready](plugins/agent-ready/CLAUDE.md)** -- keep a repo agent-optimized (seven dimensions, progressive disclosure) via skill + /agent-ready command + line-budget/context-drift hooks
 - **[your-voice](plugins/your-voice/CLAUDE.md)** -- the mirror of my-voice: talk to the user the way they need; interaction modes inferred silently from communication style on a sacred baseline, injected always-on via a SessionStart hook
+- **[gyr-fleet](plugins/gyr-fleet/CLAUDE.md)** -- register each Claude Code session in the gyr fleet (heartbeat on start + each prompt, done on end) via best-effort hooks calling the local gyr CLI

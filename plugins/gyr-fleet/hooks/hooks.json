@@ -1,0 +1,39 @@
+{
+  "description": "gyr-fleet: register this Claude session in the gyr fleet — heartbeat on start and each prompt, done on session end.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/gyr-fleet-heartbeat.sh\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/gyr-fleet-heartbeat.sh\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/gyr-fleet-heartbeat.sh\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}
