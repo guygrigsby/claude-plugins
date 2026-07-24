@@ -1,7 +1,7 @@
 {
   "name": "drift-guards",
   "version": "0.1.0",
-  "description": "Every fact that lives in two places gets a test comparing them, code side as the source of truth. Nine guard shapes for docs, tables, examples, paths, and hashes, wired into the project's default test gate.",
+  "description": "Every fact that lives in more than one place gets a test comparing the copies, code side as the source of truth. Guard shapes for doc tables, config keys, version strings, generated artifacts, examples, paths, and schemas, wired into the project's default test gate.",
   "author": {
     "name": "Guy J Grigsby"
   },
