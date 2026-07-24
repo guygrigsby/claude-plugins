@@ -1,0 +1,40 @@
+name: checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  guards:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      # marketplace.json is generated from the plugin manifests. On main, CI
+      # regenerates and commits it so a version bump in plugin.json is the only
+      # edit a release needs. On a PR the guard below fails instead, since the
+      # branch may live on a fork CI cannot push to.
+      - name: Sync marketplace manifest
+        if: github.event_name == 'push'
+        run: |
+          npm run gen
+          if git diff --quiet -- .claude-plugin/marketplace.json; then
+            echo "already in sync"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: sync marketplace manifest from plugin manifests" -- .claude-plugin/marketplace.json
+          git push
+
+      - name: Drift guards
+        run: npm test
+
+      - name: agent-ready hook tests
+        run: node --test plugins/agent-ready/tests/*.test.js

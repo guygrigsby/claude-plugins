@@ -30,8 +30,11 @@ Then install individual plugins:
 ## Adding a Plugin
 
 1. Create a directory under `plugins/<name>/`
-2. Add `.claude-plugin/plugin.json`, `commands/`, and optionally `agents/`
-3. Add an entry to `.claude-plugin/marketplace.json`
+2. Add `.claude-plugin/plugin.json`, `commands/`, and optionally `agents/` or `skills/`
+3. Add the plugin to the table above and to the `## Plugins` list in [CLAUDE.md](CLAUDE.md)
+4. Run `npm run gen` to regenerate `.claude-plugin/marketplace.json`, then `npm test`
+
+`.claude-plugin/marketplace.json` is generated from the plugin manifests, so a version bump only ever touches `plugins/<name>/.claude-plugin/plugin.json`. CI regenerates and commits it on pushes to `main`; `npm test` catches a stale one everywhere else.
 
 ## License
 

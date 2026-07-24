@@ -6,6 +6,36 @@
   },
   "plugins": [
     {
+      "name": "agent-ready",
+      "description": "Keep a repo optimized for coding agents. Audits seven agent-ergonomics dimensions, auto-fixes the safe class, and enforces line budget + context drift via hooks.",
+      "version": "0.1.0",
+      "source": "./plugins/agent-ready"
+    },
+    {
+      "name": "ddd",
+      "description": "Domain-driven design for large changes. Bounded contexts, ubiquitous language, aggregates and invariants, and anti-corruption layers, captured as artifacts before code.",
+      "version": "0.1.0",
+      "source": "./plugins/ddd"
+    },
+    {
+      "name": "drift-guards",
+      "description": "Every fact that lives in more than one place gets a test comparing the copies, code side as the source of truth. Guard shapes for doc tables, config keys, version strings, generated artifacts, examples, paths, and schemas, wired into the project's default test gate.",
+      "version": "0.1.0",
+      "source": "./plugins/drift-guards"
+    },
+    {
+      "name": "gyr-fleet",
+      "description": "Register each Claude Code session in the gyr fleet: heartbeat on session start and every prompt, mark done on session end. Best-effort via the local gyr CLI; never blocks a session.",
+      "version": "0.1.0",
+      "source": "./plugins/gyr-fleet"
+    },
+    {
+      "name": "my-voice",
+      "description": "Build a personal writing-voice corpus from email, blog, and GitHub PR/review history; distill it into a style guide; draft new text in your own voice.",
+      "version": "0.1.0",
+      "source": "./plugins/my-voice"
+    },
+    {
       "name": "sno",
       "description": "Straightforward spec-driven development. Learn, plan, build, check, ship.",
       "version": "1.24.0",
@@ -18,40 +48,10 @@
       "source": "./plugins/wu"
     },
     {
-      "name": "my-voice",
-      "description": "Build a personal writing-voice corpus from email, blog, and GitHub PR/review history; distill it into a style guide; draft new text in your own voice.",
-      "version": "0.1.0",
-      "source": "./plugins/my-voice"
-    },
-    {
-      "name": "ddd",
-      "description": "Domain-driven design for large changes. Bounded contexts, ubiquitous language, aggregates and invariants, and anti-corruption layers, captured as artifacts before code.",
-      "version": "0.1.0",
-      "source": "./plugins/ddd"
-    },
-    {
-      "name": "agent-ready",
-      "description": "Keep a repo optimized for coding agents. Audits seven agent-ergonomics dimensions, auto-fixes the safe class, and enforces line budget + context drift via hooks.",
-      "version": "0.1.0",
-      "source": "./plugins/agent-ready"
-    },
-    {
       "name": "your-voice",
       "description": "The mirror of my-voice: talk to the user the way they need. Interaction modes inferred silently from communication style, layered on a sacred baseline disposition, injected always-on via a SessionStart hook.",
       "version": "0.1.0",
       "source": "./plugins/your-voice"
-    },
-    {
-      "name": "gyr-fleet",
-      "description": "Register each Claude Code session in the gyr fleet: heartbeat on session start and every prompt, mark done on session end. Best-effort via the local gyr CLI; never blocks a session.",
-      "version": "0.1.0",
-      "source": "./plugins/gyr-fleet"
-    },
-    {
-      "name": "drift-guards",
-      "description": "Every fact that lives in more than one place gets a test comparing the copies, code side as the source of truth. Guard shapes for doc tables, config keys, version strings, generated artifacts, examples, paths, and schemas, wired into the project's default test gate.",
-      "version": "0.1.0",
-      "source": "./plugins/drift-guards"
     }
   ]
 }

@@ -24,18 +24,25 @@ plugins/
 
 1. Create `plugins/<name>/` with a `.claude-plugin/plugin.json`
 2. Add commands in `plugins/<name>/commands/` and agents in `plugins/<name>/agents/` (or `skills/` for a skill plugin)
-3. Add an entry to `.claude-plugin/marketplace.json` with `git-subdir` source pointing to `plugins/<name>`
-4. Add a `CLAUDE.md` in the plugin directory describing the plugin
-5. **Always update both plugin lists in the same commit:** the table in the root `README.md` AND the `## Plugins` list at the bottom of this `CLAUDE.md`. A new plugin isn't done until it appears in both. When in doubt, grep the root docs for an existing plugin name and add the new one everywhere that name shows up.
+3. Add a `CLAUDE.md` in the plugin directory describing the plugin
+4. **Always update both plugin lists in the same commit:** the table in the root `README.md` AND the `## Plugins` list at the bottom of this `CLAUDE.md`. A new plugin isn't done until it appears in both.
+5. Run `npm run gen` to regenerate `.claude-plugin/marketplace.json`, then `npm test`
+
+Steps 4 and 5 are enforced by `tests/manifests.test.js`, so a forgotten list or a stale manifest fails the build rather than shipping.
 
 ## Versioning
 
-**The plugin version lives in two places and they MUST be bumped together:**
+The version lives in exactly one place: `plugins/<name>/.claude-plugin/plugin.json`. Bump it there and nowhere else.
 
-1. `plugins/<name>/.claude-plugin/plugin.json` — the plugin's own manifest
-2. `.claude-plugin/marketplace.json` — the marketplace entry users install from
+`.claude-plugin/marketplace.json` is **generated** from the plugin manifests by `tools/marketplace.js` (`npm run gen`). Never hand-edit it. Name, version, description, and source all derive from the plugin manifest; only the marketplace's own name/description/owner are hand-authored, in the generator.
 
-If these drift, users install a stale version. Any commit that bumps one must bump the other in the same commit. When shipping a new version, grep for the old version string to confirm nothing was missed.
+CI regenerates and commits it on every push to `main`, so a release is a one-line edit. On a pull request CI cannot push, so the guard fails instead and tells you to run `npm run gen`.
+
+## Checks
+
+`npm test` runs the drift guards in `tests/manifests.test.js`: manifest present and named after its directory, versions well-formed, `marketplace.json` in sync, both root doc lists matching `plugins/` in both directions, relative links in the root docs resolving, and hook `command` paths pointing at files that exist. CI runs the same gate plus `plugins/agent-ready/tests/`.
+
+Guards discover plugins by listing `plugins/`, so a new one is covered without editing the tests.
 
 ## Plugins
 

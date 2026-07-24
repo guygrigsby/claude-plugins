@@ -1,0 +1,10 @@
+{
+  "name": "guygrigsby-plugins",
+  "private": true,
+  "description": "Claude Code plugin marketplace by Guy Grigsby",
+  "license": "MIT",
+  "scripts": {
+    "gen": "node tools/marketplace.js",
+    "test": "node --test tests/*.test.js"
+  }
+}
