@@ -25,6 +25,7 @@ Then install individual plugins:
 | [agent-ready](plugins/agent-ready/) | Keep a repo optimized for coding agents. Audits seven agent-ergonomics dimensions, auto-fixes safe items, and enforces line budget + context drift via hooks. |
 | [your-voice](plugins/your-voice/) | The mirror of my-voice: talk to the user the way they need. Interaction modes inferred silently from communication style, on a sacred baseline, injected always-on via a SessionStart hook. |
 | [gyr-fleet](plugins/gyr-fleet/) | Register each Claude Code session in the gyr fleet: heartbeat on session start and every prompt, mark done on session end. Best-effort via the local gyr CLI; never blocks a session. |
+| [drift-guards](plugins/drift-guards/) | Every fact that lives in two places gets a test comparing them, code side as the source of truth. Nine guard shapes for docs, tables, examples, paths, and hashes, wired into the project's default test gate. |
 
 ## Adding a Plugin
 

@@ -46,6 +46,12 @@
       "description": "Register each Claude Code session in the gyr fleet: heartbeat on session start and every prompt, mark done on session end. Best-effort via the local gyr CLI; never blocks a session.",
       "version": "0.1.0",
       "source": "./plugins/gyr-fleet"
+    },
+    {
+      "name": "drift-guards",
+      "description": "Every fact that lives in two places gets a test comparing them, code side as the source of truth. Nine guard shapes for docs, tables, examples, paths, and hashes, wired into the project's default test gate.",
+      "version": "0.1.0",
+      "source": "./plugins/drift-guards"
     }
   ]
 }
