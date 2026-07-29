@@ -8,10 +8,14 @@ An ACL keeps a vendor's or legacy system's model from leaking into your domain. 
 // package billing — the domain. Knows nothing about any vendor.
 package billing
 
+// Money is a value object. Unexported fields; NewMoney is the only way in,
+// so the invariants (non-negative, known currency) hold for every instance.
 type Money struct {
-    Minor    int64  // minor units (cents); never float
-    Currency string
+    minor    int64  // minor units (cents); never float
+    currency string
 }
+
+func NewMoney(minor int64, currency string) (Money, error) { /* validate, refuse */ }
 
 type ChargeRequest struct {
     Amount     Money
