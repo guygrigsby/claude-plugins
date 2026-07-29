@@ -14,7 +14,7 @@ Every domain object is one or the other — classify it explicitly in the artifa
 | **Aggregate root** | The one entity through which all external access to the aggregate flows. Enforces invariants. | Who guarantees the invariant holds? |
 | **Repository** | Collection-like interface for loading/saving aggregates. Hides persistence. | Can you swap the DB without touching domain logic? |
 | **Domain event** | A record that something meaningful happened in the domain (`ChargeRefunded`). | Do other contexts need to react to this? |
-| **Domain service** | Domain logic that doesn't naturally belong to one entity/value object. | Is this an operation across aggregates, not state of one? |
+| **Domain service** | Logic for interactions *between* domain objects — only what genuinely belongs to no single one. A service touching one object's state is that object's method, misplaced. | Is this an operation across aggregates, not state of one? |
 | **Factory** | Encapsulates complex creation so an aggregate is born valid. | Is constructing this thing non-trivial / invariant-laden? |
 
 ## Invariants
@@ -24,7 +24,7 @@ A rule that must **always** be true for the object (`reserved <= on_hand`). Two 
 - **Construction:** the constructor (or factory) validates and refuses. An object that exists is valid; there is no path to an instance that skips the check — no exported fields, no setters that bypass it.
 - **Mutation:** every operation that can break the invariant lives inside the aggregate root, never in callers.
 
-If a caller can construct or mutate the object into an invalid state, the model is anemic — data with the rules living elsewhere — and the boundary is wrong.
+The entity owns its invariants and the behavior that changes its state. A model whose objects hold data but almost no behavior is **anemic**: the rules leak into callers and services, and every caller becomes a place an invariant can be forgotten. Domain services are only for interactions between objects, never a home for one object's behavior.
 
 ## Model parsimony
 

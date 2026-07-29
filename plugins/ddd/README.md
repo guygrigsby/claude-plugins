@@ -21,7 +21,7 @@ The skill auto-fires on every architecture or design session, no matter how smal
 - Restructuring data ownership across modules.
 - Any discussion where types, boundaries, or responsibilities get chosen.
 
-It also reacts to the symptoms: vendor types leaking across module boundaries, the same domain word meaning different things in different places, or anemic domain models — data-only structs with the rules in callers.
+It also reacts to the symptoms: vendor types leaking across module boundaries, the same domain word meaning different things in different places, or anemic domain models — objects holding data but almost no behavior, rules living in callers.
 
 The only opt-out is saying so ("no DDD"). It skips only work with no design decision at all: mechanical bugfixes, config tweaks.
 

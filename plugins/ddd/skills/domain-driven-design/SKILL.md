@@ -1,6 +1,6 @@
 ---
 name: domain-driven-design
-description: Use when any architecture or design work begins, however small — designing a new feature, subsystem, or service, an architectural shift, encapsulating or replacing a dependency, restructuring how modules relate, or any session where the shape of the code is being decided. Also when vendor or implementation types have leaked across module boundaries, when the same domain term means different things in different parts of the code, or when domain objects are anemic — data-only structs whose rules live in callers or services. Active by default for design work; the user opting out ("no DDD") is the only skip. Not for mechanical bugfixes or config tweaks that decide nothing about design.
+description: Use when any architecture or design work begins, however small — designing a new feature, subsystem, or service, an architectural shift, encapsulating or replacing a dependency, restructuring how modules relate, or any session where the shape of the code is being decided. Also when vendor or implementation types have leaked across module boundaries, when the same domain term means different things in different parts of the code, or when the domain model is anemic — objects holding data but almost no behavior, rules living in callers or services. Active by default for design work; the user opting out ("no DDD") is the only skip. Not for mechanical bugfixes or config tweaks that decide nothing about design.
 ---
 
 # Domain-Driven Design
@@ -30,7 +30,7 @@ Symptoms that you're already in DDD territory:
 - Vendor or implementation types (`stripe.Charge`, `sql.DB`, `s3.Client`) appear in signatures or struct fields across more than one module.
 - The same word ("order", "stock", "account") means different things in different parts of the code.
 - A single change forces edits across several otherwise-unrelated packages.
-- Anemic domain model: data-only structs with exported fields, every rule enforced (or forgotten) in callers and services.
+- Anemic domain model: objects hold data but almost no behavior; every rule enforced (or forgotten) in callers and services.
 
 **Skip it** only for work with no design decision at all — a mechanical bugfix, a config tweak. Say so explicitly when you skip: "no design decision here, no DDD modeling needed."
 
@@ -77,7 +77,9 @@ Three rules, all mandatory:
 
 **Aim for as few domain objects as possible.** An object earns its existence with an invariant to enforce or an identity to track. If a candidate object has neither, it's a field on something else. Merge or delete until every object that remains is load-bearing.
 
-**Capture every invariant in a constructor.** An object that exists is valid — that's the contract. The constructor (or factory, when creation is complex) validates and refuses; there is no other way to build the object, no exported fields or setters that bypass it. A data-only struct with the rules living in callers or services is an *anemic domain model* — the model exists but encapsulates nothing, and every caller becomes a place the invariant can be forgotten. For each aggregate, also state the consistency boundary and put every operation that can break an invariant *inside* it, so post-construction changes are guarded in one place too.
+**Capture every invariant in a constructor.** An object that exists is valid — that's the contract. The constructor (or factory, when creation is complex) validates and refuses; there is no other way to build the object, no exported fields or setters that bypass it. For each aggregate, also state the consistency boundary and put every operation that can break an invariant *inside* it, so post-construction changes are guarded in one place too.
+
+**The object owns its behavior, not just its data.** An *anemic domain model* is one whose objects contain data but almost no behavior — the rules live in callers and services, and every caller becomes a place an invariant can be forgotten. Any behavior specific to one domain object belongs on that object: the entity enforces its own invariants and exposes the operations that change its state. Domain services exist only for interactions *between* objects — logic that genuinely spans aggregates. A domain service that manipulates one object's state is that object's method in the wrong place.
 
 ### 4. Place the anti-corruption layer
 
@@ -150,7 +152,7 @@ Order, subscription, and reporting code import `billing` only — never `billing
 | Mistake | Fix |
 |---------|-----|
 | "I'll just write the adapter" — skips contexts/language/invariants | The adapter is step 4 of 5. Name the contexts and invariants first or the boundary is in the wrong place. |
-| Anemic domain model: exported-field structs, rules in services/callers | Move the rules into the type. Invariants live in the constructor; behavior lives on the object. |
+| Anemic domain model: objects hold data but almost no behavior | Object-specific behavior goes on the object; the entity owns its invariants. Constructors validate; methods mutate. Domain services only for interactions between objects. |
 | Object constructible in an invalid state | Constructor or factory validates and refuses. Born valid or not born; no bypass via exported fields or setters. |
 | Domain object with no declared kind | Classify it: entity (identity persists) or value object (values only, immutable). Every object, no exceptions. |
 | Domain object sprawl — a type per noun in the requirements | An object earns existence with an invariant or an identity. Otherwise it's a field. Merge or delete. |
