@@ -32,7 +32,7 @@ The entity owns its invariants and the behavior that changes its state. A model 
 
 ## What earns a place in the model
 
-An object earns its place by making a domain concept explicit: an invariant to enforce, an identity to track, or a concept that would otherwise hide in a primitive or a flag (an `EmailAddress`, a `Specification`, a domain event). Both failure modes are real — a type per requirement noun is sprawl; domain concepts as raw `string`/`int64` is primitive obsession. Prefer a small value object over a bare primitive, and delete objects that make nothing explicit.
+An object earns its place by making a domain concept explicit: an invariant to enforce, an identity to track, or a concept that would otherwise hide in a primitive or a flag (an `EmailAddress`, a `Specification`, a domain event). Both failure modes are real — a type per requirement noun is sprawl; domain concepts as raw `string`/`int64` is primitive obsession. Prefer a small value object over a bare primitive, and delete objects that don't earn their keep.
 
 ## Subdomain distillation
 

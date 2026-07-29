@@ -14,7 +14,7 @@
     {
       "name": "ddd",
       "description": "Domain-driven design for every design session. Subdomain distillation, language-sized bounded contexts, entity/VO-classified domain objects with constructor-enforced invariants, aggregate discipline with domain events, and anti-corruption layers, captured as artifacts before code.",
-      "version": "0.3.0",
+      "version": "0.3.1",
       "source": "./plugins/ddd"
     },
     {

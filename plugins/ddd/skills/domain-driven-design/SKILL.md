@@ -9,7 +9,7 @@ description: Use when any architecture or design work begins, however small — 
 
 Design sessions are where unexamined coupling, anemic models and vendor lock-in calcify — the large ones and the small ones alike. DDD makes the boundaries and the domain model explicit *before* code, so the design survives the next dependency swap or scope expansion.
 
-**Core principle:** model the domain first, name the boundaries, classify every domain object (entity or value object), enforce each aggregate's invariants at construction and mutation, keep each context's types free of leaked implementation or vendor types, and translate at the edge. Contexts sized by language, modeling effort concentrated on the core domain, no object that makes nothing explicit. Produce a written artifact before implementation.
+**Core principle:** model the domain first, name the boundaries, classify every domain object (entity or value object), enforce each aggregate's invariants at construction and mutation, keep each context's types free of leaked implementation or vendor types, and translate at the edge. Contexts sized by language, modeling effort concentrated on the core domain, every object earning its keep by making a concept explicit. Produce a written artifact before implementation.
 
 This is a discipline skill. The steps are not optional decoration on top of "just write the adapter." Arriving at a reasonable structure without naming the contexts, the language, and the invariants leaves the next person (and the next dependency swap) to rediscover them.
 
@@ -82,7 +82,7 @@ Four rules, all mandatory:
 
 **Classify every domain object as an entity or a value object.** No unclassified objects. Entity: identity persists across state changes. Value object: defined entirely by its values, immutable, interchangeable. Write the classification into the artifact — it decides equality, mutability, and lifecycle, so leaving it implicit means deciding it by accident later.
 
-**Every object makes a concept explicit; no object makes nothing explicit.** An object earns its place with an invariant to enforce, an identity to track, or a domain concept that would otherwise hide in a primitive or a flag — an `EmailAddress`, a `Specification`, a domain event. Both failure modes are real. A type per noun in the requirements is sprawl: merge or delete until everything left is load-bearing. But raw `string`/`int64` standing in for domain concepts is *primitive obsession*, the anemic model's cousin — prefer a small value object over a bare primitive; the type carries the meaning and the validation.
+**Every object earns its keep by making a concept explicit.** The keep is earned with an invariant to enforce, an identity to track, or a domain concept that would otherwise hide in a primitive or a flag — an `EmailAddress`, a `Specification`, a domain event. Both failure modes are real. A type per noun in the requirements is sprawl: merge or delete until everything left is load-bearing. But raw `string`/`int64` standing in for domain concepts is *primitive obsession*, the anemic model's cousin — prefer a small value object over a bare primitive; the type carries the meaning and the validation.
 
 **Capture every invariant in a constructor — scoped to its aggregate.** A *true* invariant is one that must hold transactionally, and it lives inside one aggregate: the constructor (or factory, when creation is complex) establishes it and refuses invalid states; every mutating operation preserves it inside the aggregate; no exported fields or setters bypass it. An object that exists is valid — that's the contract. A rule spanning aggregates is *not* a constructor's job: never grow a giant aggregate to make it one (that's the lock-contention, concurrency-conflict failure). Cross-aggregate rules are eventually consistent — one aggregate commits, emits a domain event, the other reacts and reconciles. Rules of the road for the boundary: reference other aggregates **by ID only**, modify **one aggregate per transaction**, integrate between aggregates and contexts **with domain events**.
 
@@ -182,7 +182,7 @@ Order, subscription, and reporting code import `billing` only — never `billing
 - About to write a domain type with exported fields and no constructor.
 - "I'll validate in the service layer" / "callers will check before constructing."
 - A domain concept riding around as a raw string or int.
-- A new domain object that makes nothing explicit — no invariant, no identity, no hidden concept.
+- A new domain object that doesn't earn its keep — no invariant, no identity, no hidden concept made explicit.
 - A domain object nobody has classified as entity or value object.
 - A transaction about to touch two aggregates, or an aggregate holding a direct reference to another.
 - Growing an aggregate so a cross-aggregate rule fits in one constructor.
