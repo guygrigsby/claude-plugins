@@ -5,18 +5,18 @@
 
 ## Contexts
 
-As few contexts as necessary. A context earns its row by owning its own language and its own data; two candidates sharing both are one context.
+Sized by language: a context extends as far as its terms stay consistent, no further. Split at same-word-different-meaning seams; don't split where language and data are both shared. Language breaks the tie. Subdomain: core / supporting / generic — modeling investment follows it.
 
-| Context | Responsibility (one line) | Owns (data / concepts) |
-|---------|---------------------------|------------------------|
-| Billing | Charges, refunds, provider integration | Charge, Customer, Invoice, Money |
-| Ordering | Order lifecycle, line items, fulfillment | Order, LineItem, FulfillmentStatus |
+| Context | Subdomain | Responsibility (one line) | Owns (data / concepts) |
+|---------|-----------|---------------------------|------------------------|
+| Billing | core | Charges, refunds, provider integration | Charge, Customer, Invoice, Money |
+| Ordering | supporting | Order lifecycle, line items, fulfillment | Order, LineItem, FulfillmentStatus |
 
 ## Relationships
 
 Notation: `Upstream -> Downstream`. Tag each edge with the pattern.
 
-- Patterns: `Customer/Supplier`, `Conformist`, `Anti-Corruption Layer (ACL)`, `Shared Kernel`, `Open Host Service`, `Published Language`.
+- Patterns: `Partnership`, `Customer/Supplier`, `Conformist`, `Anti-Corruption Layer (ACL)`, `Shared Kernel`, `Open Host Service`, `Published Language`, `Separate Ways` (no integration — a legitimate edge label, or the reason a pair has no edge).
 
 | Upstream | Downstream | Pattern | Notes |
 |----------|-----------|---------|-------|

@@ -27,11 +27,11 @@ The only opt-out is saying so ("no DDD"). It skips only work with no design deci
 
 ## What it produces
 
-1. A **context map** — the bounded contexts and how they relate. As few contexts as necessary; a context earns its boundary with its own language and data.
-2. The **ubiquitous language** — the terms each context owns, ambiguities resolved.
-3. **Domain objects and invariants** — every object classified entity or value object, as few objects as possible, every invariant captured in a constructor so objects are born valid.
+1. A **context map** — subdomains distilled (core / supporting / generic) and bounded contexts sized by language, with their relationships.
+2. The **ubiquitous language** — the terms each context owns, ambiguities resolved with the user.
+3. **Domain objects and invariants** — every object classified entity or value object and earning its place by making a concept explicit, true invariants captured in constructors so objects are born valid, cross-aggregate rules eventually consistent via domain events.
 4. An **anti-corruption layer** — when wrapping or swapping a dependency, the boundary that keeps vendor types out of the domain.
-5. A short **ADR** in `docs/specs/`, written before implementation.
+5. A short **ADR** in `docs/specs/`, written before implementation and revised when implementation contradicts the model.
 
 Templates for the context map, ADR, and ACL ship with the skill. The core workflow is language-neutral; the ACL skeleton and worked example are Go.
 

@@ -10,7 +10,7 @@ What's changing and why. The forces in play: existing coupling, vendor lock-in, 
 
 ## Bounded contexts
 
-The contexts this change touches and their relationships. (Summarize; full detail in the context map.)
+The contexts this change touches, their subdomain classification (core / supporting / generic — where the modeling investment goes), and their relationships. (Summarize; full detail in the context map.)
 
 ## Ubiquitous language
 
@@ -18,12 +18,16 @@ The domain terms this change pins down. Note any term that was ambiguous and how
 
 ## Domain objects and invariants
 
-Every domain object appears here with its kind. Fewest objects that carry the rules; an object earns its row with an invariant or an identity. Every invariant is enforced in the object's constructor or factory — note any that can't be and why.
+Every domain object appears here with its kind; an object earns its row by making a concept explicit (an invariant, an identity, or a concept otherwise hiding in a primitive). True (in-aggregate) invariants are enforced in the object's constructor or factory — note any that can't be and why. Cross-aggregate rules are listed separately as eventually consistent: which event, which reaction. Aggregates reference each other by ID only; one aggregate per transaction.
 
 | Domain object | Kind (entity / VO) | Consistency boundary | Invariants (enforced at construction) |
 |---------------|--------------------|----------------------|---------------------------------------|
 | StockItem | entity (aggregate root) | per SKU + location | `reserved <= on_hand`; `available = on_hand - reserved >= 0` |
 | Quantity | value object | — | `>= 0` |
+
+| Cross-aggregate rule | Event | Reaction |
+|----------------------|-------|----------|
+| customer outstanding `<=` credit limit | `ChargeCreated` | Credit context recalculates; flags or holds the account |
 
 ## Anti-corruption layer
 

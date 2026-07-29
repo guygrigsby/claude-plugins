@@ -1,7 +1,7 @@
 {
   "name": "ddd",
-  "version": "0.2.0",
-  "description": "Domain-driven design for every design session. Minimal bounded contexts, ubiquitous language, entity/VO-classified domain objects with constructor-enforced invariants, and anti-corruption layers, captured as artifacts before code.",
+  "version": "0.3.0",
+  "description": "Domain-driven design for every design session. Subdomain distillation, language-sized bounded contexts, entity/VO-classified domain objects with constructor-enforced invariants, aggregate discipline with domain events, and anti-corruption layers, captured as artifacts before code.",
   "author": {
     "name": "Guy J Grigsby"
   },

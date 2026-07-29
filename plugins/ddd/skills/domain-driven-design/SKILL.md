@@ -9,7 +9,7 @@ description: Use when any architecture or design work begins, however small — 
 
 Design sessions are where unexamined coupling, anemic models and vendor lock-in calcify — the large ones and the small ones alike. DDD makes the boundaries and the domain model explicit *before* code, so the design survives the next dependency swap or scope expansion.
 
-**Core principle:** model the domain first, name the boundaries, classify every domain object (entity or value object), capture every invariant in a constructor, keep each context's types free of leaked implementation or vendor types, and translate at the edge. Fewest contexts, fewest objects that carry the rules. Produce a written artifact before implementation.
+**Core principle:** model the domain first, name the boundaries, classify every domain object (entity or value object), enforce each aggregate's invariants at construction and mutation, keep each context's types free of leaked implementation or vendor types, and translate at the edge. Contexts sized by language, modeling effort concentrated on the core domain, no object that makes nothing explicit. Produce a written artifact before implementation.
 
 This is a discipline skill. The steps are not optional decoration on top of "just write the adapter." Arriving at a reasonable structure without naming the contexts, the language, and the invariants leaves the next person (and the next dependency swap) to rediscover them.
 
@@ -56,30 +56,37 @@ digraph ddd {
     "3. Model domain objects + invariants" -> "4. Place anti-corruption layer";
     "4. Place anti-corruption layer" -> "5. Write artifact to docs/specs/";
     "5. Write artifact to docs/specs/" -> "Implement";
+    "Implement" -> "1. Map bounded contexts" [label="code contradicts model", style=dashed];
 }
 ```
 
-### 1. Map bounded contexts
+The back edge is real: when implementation contradicts the model, revise the artifact — refactoring toward deeper insight is part of the discipline, not a failure of it.
 
-Name each context and its responsibility. Draw the relationships: which is upstream/downstream, customer/supplier, conformist, or shielded by an anti-corruption layer. Use the `templates/context-map.md` template.
+### 1. Distill the domain, map bounded contexts
 
-Use **as few contexts as necessary**. A context earns its boundary by owning its own language and its own data; if two candidate contexts share both, they are one context. Every extra context is a translation layer, a mapping table, and a coordination cost you pay forever. When in doubt, merge — splitting later at a real seam is cheaper than maintaining an imaginary one.
+First classify each subdomain: **core** (the differentiator — this is where deep modeling investment pays), **supporting**, or **generic** (auth, notifications, commodity billing — buy it, conform to it, or keep the model shallow). Effort follows the classification; full ceremony on a generic subdomain is misdirected, and a conformist relationship is often the *right* answer there.
+
+Then name each context and its responsibility. Draw the relationships: partnership, customer/supplier, conformist, shielded by an anti-corruption layer, or separate ways (no integration at all — the cheapest correct answer more often than it gets picked). Use the `templates/context-map.md` template.
+
+**A context is sized by its language.** It extends exactly as far as the model and its terms stay consistent. Same word, different meaning is a seam — split there, whatever the current schema or team layout says. Don't split where language *and* data are both shared; every extra context is a translation layer and a coordination cost. When the two pressures conflict, language breaks the tie.
 
 ### 2. Name the ubiquitous language
 
 List the domain terms each context owns. Flag terms that mean different things in different contexts — that ambiguity is usually the source of the tangle. State which values are *stored* and which are *derived* (storing a derived value is how numbers drift).
 
+The language is crunched *with* the domain expert, not invented solo — here, that's the user. Confirm any term whose meaning you inferred; a wrong meaning pinned into the artifact ships with full ceremony behind it.
+
 ### 3. Model domain objects and invariants
 
-Three rules, all mandatory:
+Four rules, all mandatory:
 
 **Classify every domain object as an entity or a value object.** No unclassified objects. Entity: identity persists across state changes. Value object: defined entirely by its values, immutable, interchangeable. Write the classification into the artifact — it decides equality, mutability, and lifecycle, so leaving it implicit means deciding it by accident later.
 
-**Aim for as few domain objects as possible.** An object earns its existence with an invariant to enforce or an identity to track. If a candidate object has neither, it's a field on something else. Merge or delete until every object that remains is load-bearing.
+**Every object makes a concept explicit; no object makes nothing explicit.** An object earns its place with an invariant to enforce, an identity to track, or a domain concept that would otherwise hide in a primitive or a flag — an `EmailAddress`, a `Specification`, a domain event. Both failure modes are real. A type per noun in the requirements is sprawl: merge or delete until everything left is load-bearing. But raw `string`/`int64` standing in for domain concepts is *primitive obsession*, the anemic model's cousin — prefer a small value object over a bare primitive; the type carries the meaning and the validation.
 
-**Capture every invariant in a constructor.** An object that exists is valid — that's the contract. The constructor (or factory, when creation is complex) validates and refuses; there is no other way to build the object, no exported fields or setters that bypass it. For each aggregate, also state the consistency boundary and put every operation that can break an invariant *inside* it, so post-construction changes are guarded in one place too.
+**Capture every invariant in a constructor — scoped to its aggregate.** A *true* invariant is one that must hold transactionally, and it lives inside one aggregate: the constructor (or factory, when creation is complex) establishes it and refuses invalid states; every mutating operation preserves it inside the aggregate; no exported fields or setters bypass it. An object that exists is valid — that's the contract. A rule spanning aggregates is *not* a constructor's job: never grow a giant aggregate to make it one (that's the lock-contention, concurrency-conflict failure). Cross-aggregate rules are eventually consistent — one aggregate commits, emits a domain event, the other reacts and reconciles. Rules of the road for the boundary: reference other aggregates **by ID only**, modify **one aggregate per transaction**, integrate between aggregates and contexts **with domain events**.
 
-**The object owns its behavior, not just its data.** An *anemic domain model* is one whose objects contain data but almost no behavior — the rules live in callers and services, and every caller becomes a place an invariant can be forgotten. Any behavior specific to one domain object belongs on that object: the entity enforces its own invariants and exposes the operations that change its state. Domain services exist only for interactions *between* objects — logic that genuinely spans aggregates. A domain service that manipulates one object's state is that object's method in the wrong place.
+**The object owns its behavior, not just its data.** An *anemic domain model* is one whose objects contain data but almost no behavior — the rules live in callers and services, and every caller becomes a place an invariant can be forgotten. Any behavior specific to one domain object belongs on that object: the entity enforces its own invariants and exposes the operations that change its state. Domain services exist only for interactions *between* objects — logic that genuinely spans aggregates. A domain service that manipulates one object's state is that object's method in the wrong place. Orchestration — loading aggregates, invoking their behavior, managing transactions — is an *application* service, outside the model, and holds no domain rules at all.
 
 ### 4. Place the anti-corruption layer
 
@@ -155,8 +162,13 @@ Order, subscription, and reporting code import `billing` only — never `billing
 | Anemic domain model: objects hold data but almost no behavior | Object-specific behavior goes on the object; the entity owns its invariants. Constructors validate; methods mutate. Domain services only for interactions between objects. |
 | Object constructible in an invalid state | Constructor or factory validates and refuses. Born valid or not born; no bypass via exported fields or setters. |
 | Domain object with no declared kind | Classify it: entity (identity persists) or value object (values only, immutable). Every object, no exceptions. |
-| Domain object sprawl — a type per noun in the requirements | An object earns existence with an invariant or an identity. Otherwise it's a field. Merge or delete. |
-| Context sprawl — a bounded context per team, module, or noun | A context earns its boundary with its own language and data. Sharing both → merge into one. |
+| Domain object sprawl — a type per noun in the requirements | An object earns its place by making a concept explicit: invariant, identity, or a concept hiding in a primitive. Otherwise it's a field. |
+| Primitive obsession — domain concepts as raw strings and ints | Wrap in a value object. The type carries the meaning and the validation. |
+| One giant aggregate so every rule is constructor-enforceable | True invariants only within one aggregate. Cross-aggregate rules go eventually consistent: commit one, emit an event, reconcile. |
+| Direct object references or multi-aggregate transactions | Reference other aggregates by ID only; modify one aggregate per transaction; events between. |
+| Context sprawl — a bounded context per team, module, or noun | A context earns its boundary with its own language and data. Sharing both → one context. |
+| Merging contexts that speak different languages | Same word, different meaning is a seam. Split there; language outranks shared data or convenience. |
+| Deep-modeling a generic subdomain | Distill first. Core gets the investment; generic gets bought, conformed to, or kept shallow. |
 | Vendor types in domain signatures | Domain interface uses domain types only. Translate in the adapter. |
 | Storing a derived value (e.g. `available`) | Store the inputs (`on_hand`, `reserved`), compute the derived value. |
 | Invariant checks scattered across callers | Move them inside the aggregate. One enforcement point. |
@@ -169,9 +181,12 @@ Order, subscription, and reporting code import `billing` only — never `billing
 - About to start design work by editing implementation directly.
 - About to write a domain type with exported fields and no constructor.
 - "I'll validate in the service layer" / "callers will check before constructing."
-- A new domain object with no invariant to enforce and no identity to track.
+- A domain concept riding around as a raw string or int.
+- A new domain object that makes nothing explicit — no invariant, no identity, no hidden concept.
 - A domain object nobody has classified as entity or value object.
-- Splitting a bounded context when neither side owns distinct language or data.
+- A transaction about to touch two aggregates, or an aggregate holding a direct reference to another.
+- Growing an aggregate so a cross-aggregate rule fits in one constructor.
+- Splitting a bounded context when neither side owns distinct language or data — or merging two that speak different languages.
 - "This design is too small for the ceremony" — only the user can say that.
 
 All of these mean: run the five steps and write the artifact first.

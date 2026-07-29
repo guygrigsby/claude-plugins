@@ -6,11 +6,11 @@ Domain-driven design as a Claude Code skill. Auto-triggers on every architecture
 
 Ships one skill, `domain-driven-design`, that fires whenever the shape of code is being decided — a new feature, subsystem, or service, an architectural shift, encapsulating or replacing a dependency, or restructuring how modules relate. The only opt-out is the user saying so. It walks five steps in order:
 
-1. Map bounded contexts (as few as necessary; a context earns its boundary with its own language and data).
-2. Name the ubiquitous language.
-3. Model domain objects and invariants: every object classified entity or value object, as few objects as possible, every invariant captured in a constructor (no anemic models).
+1. Distill subdomains (core / supporting / generic) and map bounded contexts, sized by language — split at same-word-different-meaning seams, don't split where language and data are both shared.
+2. Name the ubiquitous language, confirming ambiguous terms with the user.
+3. Model domain objects and invariants: every object classified entity or value object and earning its place by making a concept explicit, true invariants captured in constructors within one aggregate, cross-aggregate rules eventually consistent via domain events (no anemic models, no primitive obsession, no giant aggregates).
 4. Place the anti-corruption layer (keep vendor/impl types out of the domain).
-5. Write a short ADR + context map to `docs/specs/` before implementing.
+5. Write a short ADR + context map to `docs/specs/` before implementing; revise it when implementation contradicts the model.
 
 It skips only work with no design decision at all: mechanical bugfixes, config tweaks.
 
