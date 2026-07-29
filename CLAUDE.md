@@ -34,6 +34,8 @@ Steps 4 and 5 are enforced by `tests/manifests.test.js`, so a forgotten list or 
 
 The version lives in exactly one place: `plugins/<name>/.claude-plugin/plugin.json`. Bump it there and nowhere else.
 
+Patch vs minor: bump **minor** when the plugin's behavior contract changes — what it triggers on, mandates, or forbids; an installed user would notice different agent behavior after updating. Bump **patch** for everything else: rewording, docs, internals. Lean toward patch when in doubt. Every content change needs *some* bump — the marketplace updater keys on the version string, so an unbumped change never reaches installed copies.
+
 `.claude-plugin/marketplace.json` is **generated** from the plugin manifests by `tools/marketplace.js` (`npm run gen`). Never hand-edit it. Name, version, description, and source all derive from the plugin manifest; only the marketplace's own name/description/owner are hand-authored, in the generator.
 
 CI regenerates and commits it on every push to `main`, so a release is a one-line edit. On a pull request CI cannot push, so the guard fails instead and tells you to run `npm run gen`.
