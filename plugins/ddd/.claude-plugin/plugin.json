@@ -1,7 +1,7 @@
 {
   "name": "ddd",
-  "version": "0.1.0",
-  "description": "Domain-driven design for large changes. Bounded contexts, ubiquitous language, aggregates and invariants, and anti-corruption layers, captured as artifacts before code.",
+  "version": "0.2.0",
+  "description": "Domain-driven design for every design session. Minimal bounded contexts, ubiquitous language, entity/VO-classified domain objects with constructor-enforced invariants, and anti-corruption layers, captured as artifacts before code.",
   "author": {
     "name": "Guy J Grigsby"
   },

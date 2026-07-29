@@ -49,7 +49,7 @@ Guards discover plugins by listing `plugins/`, so a new one is covered without e
 - **[sno](plugins/sno/CLAUDE.md)** -- spec-driven development loop (learn, plan, build, check, ship)
 - **[wu](plugins/wu/CLAUDE.md)** -- zero-slop development with persona-driven analysis and cloud-first dispatch
 - **[my-voice](plugins/my-voice/CLAUDE.md)** -- personal writing-voice corpus, style-guide distillation, and voiced drafting
-- **[ddd](plugins/ddd/CLAUDE.md)** -- domain-driven design for large changes (bounded contexts, ubiquitous language, aggregates/invariants, anti-corruption layers) before code
+- **[ddd](plugins/ddd/CLAUDE.md)** -- domain-driven design for every design session (minimal bounded contexts, ubiquitous language, entity/VO-classified domain objects with constructor-enforced invariants, anti-corruption layers) before code
 - **[agent-ready](plugins/agent-ready/CLAUDE.md)** -- keep a repo agent-optimized (seven dimensions, progressive disclosure) via skill + /agent-ready command + line-budget/context-drift hooks
 - **[your-voice](plugins/your-voice/CLAUDE.md)** -- the mirror of my-voice: talk to the user the way they need; interaction modes inferred silently from communication style on a sacred baseline, injected always-on via a SessionStart hook
 - **[gyr-fleet](plugins/gyr-fleet/CLAUDE.md)** -- register each Claude Code session in the gyr fleet (heartbeat on start + each prompt, done on end) via best-effort hooks calling the local gyr CLI

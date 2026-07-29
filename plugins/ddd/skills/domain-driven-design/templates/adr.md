@@ -16,11 +16,14 @@ The contexts this change touches and their relationships. (Summarize; full detai
 
 The domain terms this change pins down. Note any term that was ambiguous and how it's resolved. State which values are stored vs derived.
 
-## Aggregates and invariants
+## Domain objects and invariants
 
-| Aggregate | Consistency boundary | Invariants that must always hold |
-|-----------|----------------------|----------------------------------|
-| StockItem | per SKU + location | `reserved <= on_hand`; `available = on_hand - reserved >= 0` |
+Every domain object appears here with its kind. Fewest objects that carry the rules; an object earns its row with an invariant or an identity. Every invariant is enforced in the object's constructor or factory — note any that can't be and why.
+
+| Domain object | Kind (entity / VO) | Consistency boundary | Invariants (enforced at construction) |
+|---------------|--------------------|----------------------|---------------------------------------|
+| StockItem | entity (aggregate root) | per SKU + location | `reserved <= on_hand`; `available = on_hand - reserved >= 0` |
+| Quantity | value object | — | `>= 0` |
 
 ## Anti-corruption layer
 

@@ -5,6 +5,8 @@
 
 ## Contexts
 
+As few contexts as necessary. A context earns its row by owning its own language and its own data; two candidates sharing both are one context.
+
 | Context | Responsibility (one line) | Owns (data / concepts) |
 |---------|---------------------------|------------------------|
 | Billing | Charges, refunds, provider integration | Charge, Customer, Invoice, Money |

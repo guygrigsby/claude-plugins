@@ -1,6 +1,6 @@
 # ddd
 
-Domain-driven design as a Claude Code skill. When a change is large enough to calcify coupling or lock you into a vendor, this skill makes Claude model the domain and the boundaries *before* writing code.
+Domain-driven design as a Claude Code skill. Whenever the shape of code is being decided — however small the design — this skill makes Claude model the domain and the boundaries *before* writing code.
 
 ## Install
 
@@ -13,22 +13,23 @@ From the `guygrigsby-plugins` marketplace:
 
 ## What triggers it
 
-The skill auto-fires on large changes:
+The skill auto-fires on every architecture or design session, no matter how small:
 
-- A new subsystem or service.
+- Designing a new feature, subsystem, or service.
 - An architectural shift (splitting/merging packages, changing how modules relate).
 - Encapsulating, wrapping, or replacing an external dependency (a payment provider, a vendor SDK, a third-party API).
 - Restructuring data ownership across modules.
+- Any discussion where types, boundaries, or responsibilities get chosen.
 
-It also reacts to the symptoms: vendor types leaking across module boundaries, or the same domain word meaning different things in different places.
+It also reacts to the symptoms: vendor types leaking across module boundaries, the same domain word meaning different things in different places, or anemic domain models — data-only structs with the rules in callers.
 
-It deliberately **skips** bugfixes, single functions, and config tweaks.
+The only opt-out is saying so ("no DDD"). It skips only work with no design decision at all: mechanical bugfixes, config tweaks.
 
 ## What it produces
 
-1. A **context map** — the bounded contexts and how they relate.
+1. A **context map** — the bounded contexts and how they relate. As few contexts as necessary; a context earns its boundary with its own language and data.
 2. The **ubiquitous language** — the terms each context owns, ambiguities resolved.
-3. **Aggregates and invariants** — the consistency boundaries and rules that must always hold.
+3. **Domain objects and invariants** — every object classified entity or value object, as few objects as possible, every invariant captured in a constructor so objects are born valid.
 4. An **anti-corruption layer** — when wrapping or swapping a dependency, the boundary that keeps vendor types out of the domain.
 5. A short **ADR** in `docs/specs/`, written before implementation.
 
