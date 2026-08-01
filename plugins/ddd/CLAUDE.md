@@ -1,10 +1,10 @@
 # ddd
 
-Domain-driven design as a Claude Code skill. Auto-triggers on every architecture or design session, however small, and forces the modeling discipline before code.
+Domain-driven design and contract completeness as Claude Code skills. Auto-triggers on every architecture or design session, however small, and forces the modeling discipline, then the contract discipline, before code.
 
 ## What it does
 
-Ships one skill, `domain-driven-design`, that fires whenever the shape of code is being decided — a new feature, subsystem, or service, an architectural shift, encapsulating or replacing a dependency, or restructuring how modules relate. The only opt-out is the user saying so. It walks five steps in order:
+Ships two skills. `domain-driven-design` fires whenever the shape of code is being decided — a new feature, subsystem, or service, an architectural shift, encapsulating or replacing a dependency, or restructuring how modules relate. The only opt-out is the user saying so. It walks five steps in order:
 
 1. Distill subdomains (core / supporting / generic) and map bounded contexts, sized by language — split at same-word-different-meaning seams, don't split where language and data are both shared.
 2. Name the ubiquitous language, confirming ambiguous terms with the user.
