@@ -18,12 +18,15 @@ The domain terms this change pins down. Note any term that was ambiguous and how
 
 ## Domain objects and invariants
 
-Every domain object appears here with its kind; an object earns its row by making a concept explicit (an invariant, an identity, or a concept otherwise hiding in a primitive). True (in-aggregate) invariants are enforced in the object's constructor or factory — note any that can't be and why. Cross-aggregate rules are listed separately as eventually consistent: which event, which reaction. Aggregates reference each other by ID only; one aggregate per transaction.
+**Full detail lives in the domain model artifact — link it here, do not inline it.** One flat object table stops being readable past two contexts, and structure is not what an ADR is for. This section names only the aggregate roots, their consistency boundaries, and the invariants a reader needs to understand *this decision*.
 
-| Domain object | Kind (entity / VO) | Consistency boundary | Invariants (enforced at construction) |
-|---------------|--------------------|----------------------|---------------------------------------|
-| StockItem | entity (aggregate root) | per SKU + location | `reserved <= on_hand`; `available = on_hand - reserved >= 0` |
-| Quantity | value object | — | `>= 0` |
+See [domain model](../specs/<name>-domain-model.md) for every object, every field and every relationship.
+
+| Aggregate root | Consistency boundary | Invariants that shaped this decision |
+|---------------|----------------------|--------------------------------------|
+| StockItem | per SKU + location | `reserved <= on_hand`; `available = on_hand - reserved >= 0` |
+
+True (in-aggregate) invariants are enforced in the constructor or factory — note any that can't be and why. Aggregates reference each other by ID only; one aggregate per transaction.
 
 | Cross-aggregate rule | Event | Reaction |
 |----------------------|-------|----------|

@@ -1,7 +1,7 @@
 {
   "name": "ddd",
-  "version": "0.4.0",
-  "description": "Domain-driven design and contract completeness for every design session. Subdomain distillation, language-sized bounded contexts, entity/VO-classified domain objects with constructor-enforced invariants, aggregate discipline with domain events, anti-corruption layers, then API, domain event and DDL contracts each defined to 100% and cross-checked against each other, captured as artifacts before code.",
+  "version": "0.5.0",
+  "description": "Domain-driven design and contract completeness for every design session. Subdomain distillation, language-sized bounded contexts, entity/VO/enum-classified domain objects with every field and every relationship carrying a cardinality, constructor-enforced invariants, aggregate discipline with domain events, anti-corruption layers, then API, domain event and DDL contracts each defined to 100% and cross-checked against each other, captured as a context map, a domain model and an ADR before code.",
   "author": {
     "name": "Guy J Grigsby"
   },
