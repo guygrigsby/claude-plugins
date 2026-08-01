@@ -13,8 +13,8 @@
     },
     {
       "name": "ddd",
-      "description": "Domain-driven design for every design session. Subdomain distillation, language-sized bounded contexts, entity/VO-classified domain objects with constructor-enforced invariants, aggregate discipline with domain events, and anti-corruption layers, captured as artifacts before code.",
-      "version": "0.3.1",
+      "description": "Domain-driven design and contract completeness for every design session. Subdomain distillation, language-sized bounded contexts, entity/VO-classified domain objects with constructor-enforced invariants, aggregate discipline with domain events, anti-corruption layers, then API, domain event and DDL contracts each defined to 100% and cross-checked against each other, captured as artifacts before code.",
+      "version": "0.4.0",
       "source": "./plugins/ddd"
     },
     {
