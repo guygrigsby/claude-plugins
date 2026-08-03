@@ -35,6 +35,18 @@ The only opt-out is saying so ("no DDD"). It skips only work with no design deci
 
 Templates for the context map, ADR, and ACL ship with the skill. The core workflow is language-neutral; the ACL skeleton and worked example are Go.
 
+## Writing DB schemas
+
+A companion skill, `writing-db-schemas`, fires whenever SQL DDL is being
+written or reviewed. Its stance: normalization is the means, integrity is the
+point — the database itself must refuse invalid states. The database generates
+ids and timestamps; every reference is an FK with explicit ON DELETE; a fact
+that happens later is its own table (no nullable `returned_at`/`deleted_at`
+status columns); closed vocabularies are seeded enum tables; NOT NULL is the
+default and every surviving NULL states its meaning; every index names the
+query it serves; rules SQL cannot express are store-enforced and recorded
+inline.
+
 ## License
 
 MIT.

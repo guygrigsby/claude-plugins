@@ -13,8 +13,8 @@
     },
     {
       "name": "ddd",
-      "description": "Domain-driven design and contract completeness for every design session. Subdomain distillation, model-sized bounded contexts, entity/VO/enum-classified objects each documented in one self-contained section with every field, behavior, relationship cardinality and state, optionality justified rather than assumed, later facts as their own tables instead of nullable columns, constructor-enforced invariants, aggregate discipline with domain events, anti-corruption layers, then API, domain event and DDL contracts each defined to 100% and cross-checked, captured as a context map, a domain model and an ADR before code.",
-      "version": "0.6.0",
+      "description": "Domain-driven design and contract completeness for every design session. Subdomain distillation, model-sized bounded contexts, entity/VO/enum-classified objects each documented in one self-contained section with every field, behavior, relationship cardinality and state, optionality justified rather than assumed, later facts as their own tables instead of nullable columns, constructor-enforced invariants, aggregate discipline with domain events, anti-corruption layers, then API, domain event and DDL contracts each defined to 100% and cross-checked, captured as a context map, a domain model and an ADR before code, with integrity-first DDL rules: DB-generated ids and timestamps, ON DELETE on every FK, later facts as their own tables, enum tables for closed vocabularies.",
+      "version": "0.7.0",
       "source": "./plugins/ddd"
     },
     {
