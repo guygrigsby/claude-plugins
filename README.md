@@ -18,8 +18,8 @@ Then install individual plugins:
 
 | Plugin | Description |
 |--------|-------------|
-| [sno](plugins/sno/) | Spec-driven development. Learn, plan, build, check, ship. |
-| [wu](plugins/wu/) | Zero-slop development with persona-driven analysis and cloud-first agent dispatch. |
+| [sno](plugins/sno/) | **Deprecated.** Spec-driven development. Learn, plan, build, check, ship. |
+| [wu](plugins/wu/) | **Deprecated.** Zero-slop development with persona-driven analysis and cloud-first agent dispatch. |
 | [my-voice](plugins/my-voice/) | Build a personal writing-voice corpus, distill it into a style guide, draft new text in your own voice. |
 | [ddd](plugins/ddd/) | Domain-driven design for every design session, however small. Distills subdomains, sizes bounded contexts by language, classifies every domain object entity or VO with constructor-enforced invariants, keeps aggregates disciplined via domain events, and places anti-corruption layers before code. |
 | [db-schemas](plugins/db-schemas/) | Integrity-first SQL DDL. The database generates ids and timestamps, every FK declares ON DELETE, later facts are their own tables instead of nullable status columns, closed vocabularies are seeded enum tables, NOT NULL by default and every index names its query. |

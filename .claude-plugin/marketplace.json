@@ -43,14 +43,14 @@
     },
     {
       "name": "sno",
-      "description": "Straightforward spec-driven development. Learn, plan, build, check, ship.",
-      "version": "1.24.0",
+      "description": "DEPRECATED, no longer maintained. Straightforward spec-driven development. Learn, plan, build, check, ship.",
+      "version": "1.24.1",
       "source": "./plugins/sno"
     },
     {
       "name": "wu",
-      "description": "Zero-slop development with persona-driven analysis and cloud-first agent dispatch.",
-      "version": "0.1.0",
+      "description": "DEPRECATED, no longer maintained. Zero-slop development with persona-driven analysis and cloud-first agent dispatch.",
+      "version": "0.1.1",
       "source": "./plugins/wu"
     },
     {

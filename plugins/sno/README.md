@@ -15,6 +15,8 @@
 ```
 # sno
 
+> **Deprecated.** sno is no longer maintained and will receive no further updates. It remains installable but nothing new is coming.
+
 Named for [Snow Tha Product](https://www.snowthaproduct.com/) who just handles business.
 
 A straightforward Claude Code plugin for spec-driven development. No bloat, no ceremony -- just a loop.

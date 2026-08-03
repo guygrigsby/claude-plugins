@@ -17,6 +17,8 @@
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠟⠋⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ```
 
+> **Deprecated.** wu is no longer maintained and will receive no further updates.
+
 Zero-slop development with persona-driven analysis and remote LLM inference.
 
 ## The Loop

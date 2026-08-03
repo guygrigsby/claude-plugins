@@ -1,5 +1,7 @@
 # sno
 
+> **Deprecated.** sno is no longer maintained and will receive no further updates.
+
 A straightforward Claude Code plugin for spec-driven development.
 
 ## The Loop

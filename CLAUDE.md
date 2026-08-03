@@ -48,8 +48,8 @@ Guards discover plugins by listing `plugins/`, so a new one is covered without e
 
 ## Plugins
 
-- **[sno](plugins/sno/CLAUDE.md)** -- spec-driven development loop (learn, plan, build, check, ship)
-- **[wu](plugins/wu/CLAUDE.md)** -- zero-slop development with persona-driven analysis and cloud-first dispatch
+- **[sno](plugins/sno/CLAUDE.md)** -- deprecated; spec-driven development loop (learn, plan, build, check, ship)
+- **[wu](plugins/wu/CLAUDE.md)** -- deprecated; zero-slop development with persona-driven analysis and cloud-first dispatch
 - **[my-voice](plugins/my-voice/CLAUDE.md)** -- personal writing-voice corpus, style-guide distillation, and voiced drafting
 - **[ddd](plugins/ddd/CLAUDE.md)** -- domain-driven design for every design session (subdomain distillation, language-sized bounded contexts, entity/VO-classified domain objects with constructor-enforced invariants, aggregate discipline with domain events, anti-corruption layers) before code
 - **[db-schemas](plugins/db-schemas/CLAUDE.md)** -- integrity-first SQL DDL whenever schemas or migrations are written (DB-generated ids and timestamps, ON DELETE on every FK, later facts as their own tables, enum tables for closed vocabularies, NOT NULL by default, indexes naming their queries)

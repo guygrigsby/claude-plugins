@@ -1,5 +1,7 @@
 # wu
 
+> **Deprecated.** wu is no longer maintained and will receive no further updates. It remains installable but nothing new is coming.
+
 Enterprise multi-agent orchestration for Claude Code. Zero-slop development with Wu-Tang Clan personas, cipher round cross-verification, compliance gates, and cloud-first agent dispatch.
 
 ## Install
