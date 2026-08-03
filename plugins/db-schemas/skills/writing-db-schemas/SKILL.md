@@ -1,6 +1,6 @@
 ---
 name: writing-db-schemas
-description: Use when writing or reviewing SQL DDL — creating a table, adding a column, designing a schema or a migration — before the first CREATE TABLE is typed. Also when a schema shows nullable status columns (returned_at, deleted_at, closed_at), foreign keys without ON DELETE, TEXT timestamps, application-generated ids, CHECK (col IN (...)) vocabularies, delimited lists or JSON columns standing in for child tables, or tables whose only key is the surrogate id.
+description: Use when writing or reviewing SQL DDL — creating a table, adding a column, designing a schema or a migration — before the first CREATE TABLE is typed. Also when a schema shows nullable status columns (returned_at, deleted_at, closed_at), foreign keys without ON DELETE, TEXT timestamps, application-generated surrogate ids, CHECK (col IN (...)) vocabularies, delimited lists or JSON columns standing in for child tables, or tables whose only key is the surrogate id.
 ---
 
 # Writing DB Schemas
@@ -14,17 +14,21 @@ from code, where it can be forgotten, into the database, where it cannot.
 
 ## The Rules
 
-1. **The database generates ids and row timestamps.** `DEFAULT` expressions —
-   `(lower(hex(randomblob(16))))` in SQLite, `gen_random_uuid()` in Postgres,
-   `CURRENT_TIMESTAMP` for both — read back with `RETURNING`. The application
-   never invents a primary key or a `created_at`.
-2. **A surrogate PK never replaces the natural key — declare both.** Every
-   table whose rows have a real-world identity carries `UNIQUE` on that
-   identity (`isbn`, `email`, `(org_id, slug)`). Every normal form is defined
-   over candidate keys; a table whose only key is the surrogate is vacuously
-   normalized and stores the same entity twice without complaint. A table
-   with genuinely no natural key (pure event rows) says so in a comment
-   where the UNIQUE would have been.
+1. **The database generates surrogate ids and row timestamps.** `DEFAULT`
+   expressions — `(lower(hex(randomblob(16))))` in SQLite,
+   `gen_random_uuid()` in Postgres, `CURRENT_TIMESTAMP` for both — read back
+   with `RETURNING`. The application never invents a surrogate key or a
+   `created_at`.
+2. **Natural keys are preferred to surrogate keys.** When a stable, atomic
+   natural key exists (`isbn`, a currency code, `(org_id, slug)`), it is the
+   primary key. Add a surrogate only when the candidate key is mutable or
+   re-assignable (`email` — it moves between people and gets reissued), must
+   not leak, or is compound and widely referenced — and then the natural key
+   still carries `UNIQUE`, because every normal form is defined over candidate
+   keys and a table whose only key is the surrogate is vacuously normalized
+   and stores the same entity twice without complaint. A table with
+   genuinely no natural key (pure event rows) says so in a comment where
+   the UNIQUE would have been.
 3. **Every reference is a foreign key, and every FK declares ON DELETE.**
    CASCADE for owned child and fact rows (line items, deletions, closures,
    memberships); RESTRICT for cross-aggregate references. A bare TEXT/INTEGER
@@ -88,16 +92,15 @@ CREATE TABLE loans (
     returned_at TEXT              -- NULL = still out
 );
 
--- ✅ facts as rows, ON DELETE everywhere, real types, DB-generated ids,
---    natural key declared beside the surrogate
+-- ✅ facts as rows, ON DELETE everywhere, real types, natural key as PK,
+--    DB-generated surrogate only where no natural key exists
 CREATE TABLE books (
-    id   TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
-    isbn TEXT NOT NULL UNIQUE   -- candidate key: the surrogate alone would
-                                -- admit the same book twice
+    isbn TEXT PRIMARY KEY   -- natural key: stable, atomic, no surrogate needed
 );
 CREATE TABLE loans (
     id        TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
-    book_id   TEXT NOT NULL REFERENCES books(id) ON DELETE RESTRICT,
+        -- event rows, no natural key: surrogate justified
+    book_isbn TEXT NOT NULL REFERENCES books(isbn) ON DELETE RESTRICT,
     loaned_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     due_at    TIMESTAMPTZ NOT NULL
 );
@@ -115,7 +118,8 @@ CREATE TABLE loan_returns (
 - A `*_at` column that is NULL until something happens
 - Two nullable columns of which at most one may be set
 - An FK with no ON DELETE behavior chosen
-- An id or `created_at` assigned in application code
+- A surrogate id or `created_at` assigned in application code
+- A surrogate id on a table whose stable natural key would have served as PK
 - `CHECK (col IN (...))` for a vocabulary
 - `UNIQUE (x, id)` next to `PRIMARY KEY (id)`
 - A copied display name a JOIN would have fetched

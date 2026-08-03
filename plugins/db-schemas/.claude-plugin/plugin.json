@@ -1,7 +1,7 @@
 {
   "name": "db-schemas",
-  "version": "0.2.0",
-  "description": "Integrity-first SQL DDL. Fires whenever DDL is written or reviewed: the database generates ids and timestamps, natural keys declared UNIQUE beside the surrogate PK, every reference an FK with explicit ON DELETE, a fact that happens later its own table instead of a nullable status column, closed vocabularies as seeded enum tables, real types for time and money, NOT NULL by default with every surviving NULL explained, 5NF checked form by form (atomic columns, whole-key dependency, independent multivalued facts split, lossless projections stored) with recorded exceptions, every index naming the query it serves.",
+  "version": "0.3.0",
+  "description": "Integrity-first SQL DDL. Fires whenever DDL is written or reviewed: natural keys preferred to surrogate keys as PK, surrogates DB-generated and justified with the natural key still UNIQUE, DB-generated row timestamps, every reference an FK with explicit ON DELETE, a fact that happens later its own table instead of a nullable status column, closed vocabularies as seeded enum tables, real types for time and money, NOT NULL by default with every surviving NULL explained, 5NF checked form by form (atomic columns, whole-key dependency, independent multivalued facts split, lossless projections stored) with recorded exceptions, every index naming the query it serves.",
   "author": {
     "name": "Guy J Grigsby"
   },

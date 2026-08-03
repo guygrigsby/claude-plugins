@@ -8,8 +8,8 @@ Ships one skill, `writing-db-schemas`. It triggers before the first `CREATE TABL
 
 The stance: normalization is the means, integrity is the point. The rules it enforces:
 
-1. The database generates ids and row timestamps; the application reads them back with `RETURNING`.
-2. A surrogate PK never replaces the natural key: real-world identity gets a UNIQUE beside the surrogate, since every normal form is defined over candidate keys.
+1. The database generates surrogate ids and row timestamps; the application reads them back with `RETURNING`.
+2. Natural keys are preferred to surrogate keys: a stable, atomic natural key is the PK; a surrogate is added only when the natural key is mutable, must not leak, or is compound and widely referenced, and then the natural key still gets UNIQUE, since every normal form is defined over candidate keys.
 3. Every reference is a foreign key and every FK declares ON DELETE (CASCADE for owned rows, RESTRICT across aggregates).
 4. A fact that happens later is its own table keyed by the parent; state derives from row existence.
 5. No conditional columns whose meaning depends on a sibling.
