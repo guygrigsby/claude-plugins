@@ -9,15 +9,16 @@ Ships one skill, `writing-db-schemas`. It triggers before the first `CREATE TABL
 The stance: normalization is the means, integrity is the point. The rules it enforces:
 
 1. The database generates ids and row timestamps; the application reads them back with `RETURNING`.
-2. Every reference is a foreign key and every FK declares ON DELETE (CASCADE for owned rows, RESTRICT across aggregates).
-3. A fact that happens later is its own table keyed by the parent; state derives from row existence.
-4. No conditional columns whose meaning depends on a sibling.
-5. Closed vocabularies are seeded enum tables, never CHECK constraints or app-enforced strings.
-6. Real types: TIMESTAMPTZ/DATE for time, integer minor units for money.
-7. NOT NULL is the default; every surviving nullable column states what NULL means.
-8. 5NF, no derivable columns; deliberate exceptions recorded beside the column.
-9. No compound-key ceremony feeding nothing.
-10. Every index names the query it serves; rules SQL cannot express are store-enforced and recorded inline.
+2. A surrogate PK never replaces the natural key: real-world identity gets a UNIQUE beside the surrogate, since every normal form is defined over candidate keys.
+3. Every reference is a foreign key and every FK declares ON DELETE (CASCADE for owned rows, RESTRICT across aggregates).
+4. A fact that happens later is its own table keyed by the parent; state derives from row existence.
+5. No conditional columns whose meaning depends on a sibling.
+6. Closed vocabularies are seeded enum tables, never CHECK constraints or app-enforced strings.
+7. Real types: TIMESTAMPTZ/DATE for time, integer minor units for money.
+8. NOT NULL is the default; every surviving nullable column states what NULL means.
+9. 5NF form by form: atomic columns (no lists, numbered families or JSON hiding a relation), nothing depending on less than a whole key, independent multivalued facts in separate tables, projections that rejoin losslessly stored as the real tables, no derivable columns; deliberate exceptions recorded beside the column.
+10. No compound-key ceremony feeding nothing.
+11. Every index names the query it serves; rules SQL cannot express are store-enforced and recorded inline.
 
 Extracted from the [ddd](../ddd/CLAUDE.md) plugin, whose `defining-contracts` skill still owns the contract-completeness pass (every table defined to 100% alongside API and event contracts); this plugin owns how the DDL itself is written.
 
