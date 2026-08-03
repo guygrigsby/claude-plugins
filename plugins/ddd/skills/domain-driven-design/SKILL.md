@@ -9,7 +9,7 @@ description: Use when any architecture or design work begins, however small — 
 
 Design sessions are where unexamined coupling, anemic models and vendor lock-in calcify — the large ones and the small ones alike. DDD makes the boundaries and the domain model explicit *before* code, so the design survives the next dependency swap or scope expansion.
 
-**Core principle:** model the domain first, name the boundaries, classify every domain object (entity, value object or enumeration), give every object all of its fields and every relationship a cardinality, enforce each aggregate's invariants at construction and mutation, keep each context's types free of leaked implementation or vendor types, and translate at the edge. Contexts sized by language, modeling effort concentrated on the core domain, every object earning its keep by making a concept explicit. Produce written artifacts — context map, domain model, ADR — before implementation.
+**Core principle:** model the domain first, name the boundaries at the size of whole models rather than responsibilities, classify every domain object (entity, value object or enumeration), give every object all of its fields and every relationship a cardinality in one self-contained section, enforce each aggregate's invariants at construction and mutation, keep each context's types free of leaked implementation or vendor types, and translate at the edge. Contexts sized by language, modeling effort concentrated on the core domain, every object earning its keep by making a concept explicit. Produce written artifacts — context map, domain model, ADR — before implementation.
 
 This is a discipline skill. The steps are not optional decoration on top of "just write the adapter." Arriving at a reasonable structure without naming the contexts, the language, and the invariants leaves the next person (and the next dependency swap) to rediscover them.
 
@@ -70,6 +70,10 @@ Then name each context and its responsibility. Draw the relationships: partnersh
 
 **A context is sized by its language.** It extends exactly as far as the model and its terms stay consistent. Same word, different meaning is a seam — split there, whatever the current schema or team layout says. Don't split where language *and* data are both shared; every extra context is a translation layer and a coordination cost. When the two pressures conflict, language breaks the tie.
 
+**Contexts are big.** The right scale is "Platform", "Cluster", "IAM", "Billing" — a whole model with its own vocabulary. If a proposed context owns two or three objects that share every word with the context beside it, it is a grouping *inside* one context: name it as a grouping and move on. Splitting by responsibility ("Recording", "Routing", "Access") produces module structure wearing context clothing, and it is the most common way this step goes wrong. Sanity check each candidate: what word means something different here than next door? No answer means no seam.
+
+**One subdomain, several contexts, is normal.** IAM inside a control plane and IAM inside a customer's deployed instance are the same subdomain and deliberately different models — different data, different rules, no sharing. That is two contexts, and saying so beats merging them for tidiness. Conversely, two contexts that turn out to share both language and data should be folded back into one; this sizing is expected to iterate as the seams show themselves.
+
 ### 2. Name the ubiquitous language
 
 List the domain terms each context owns. Flag terms that mean different things in different contexts — that ambiguity is usually the source of the tangle. State which values are *stored* and which are *derived* (storing a derived value is how numbers drift).
@@ -78,11 +82,19 @@ The language is crunched *with* the domain expert, not invented solo — here, t
 
 ### 3. Model domain objects, fields and relationships
 
-The output is a **domain model artifact**, separate from the ADR: the ADR records decisions, this records structure. Use `templates/domain-model.md`. Nine rules, all mandatory.
+The output is a **domain model artifact**, separate from the ADR: the ADR records decisions, this records structure. Use `templates/domain-model.md`. Every rule below is mandatory.
 
 **Classify every domain object as an entity, a value object, or an enumeration.** No unclassified objects. Entity: identity persists across state changes. Value object: defined entirely by its values, immutable, interchangeable. Enumeration: a closed set of named values. Write the classification into the artifact — it decides equality, mutability, and lifecycle, so leaving it implicit means deciding it by accident later.
 
-**List every field of every object: name, type, optionality, meaning.** Not the interesting ones, all of them. A model that names objects but not their fields cannot be checked against a schema, an API, or anyone's understanding, and the fields are where the disagreements actually live. For every optional field state **what absence means** — "absent means never cancelled" is a fact someone can act on; an optional field with no stated meaning gets interpreted two different ways by two different readers.
+**Everything about one object lives in one place.** Fields, behaviors, invariants, relationships with their cardinalities, and its state machine all sit in that object's own section. Do not scatter them into a fields section, an ownership table, and a relationships section that a reader has to join by hand — a reviewer asked to cross-reference three tables to understand one object will stop reviewing. One section per object, complete.
+
+**List every field of every object: name, type, meaning.** Not the interesting ones, all of them. A model that names objects but not their fields cannot be checked against a schema, an API, or anyone's understanding, and the fields are where the disagreements actually live.
+
+**Optionality is a design decision to justify, not a default.** Ask what absence means before allowing it, and prefer a shape where nothing is absent. In a record, a log, or an audit, a thing that went wrong is recorded explicitly — an outcome enumeration plus whatever evidence exists — never an empty field: an audit with missing information is not an audit. Where absence survives, the table says what it means and the reader can act on it.
+
+**A fact that happens later gets its own object, not a nullable column.** Cancellation, closure, revocation, completion, deletion — these are events that may never occur. A `revokedAt` sitting null on every live row is denormalized: the row carries a field about something that has not happened. Model the fact as its own object with its own table (`credential_revocations`, `session_closures`, `tool_results`), and derive the state from whether the row exists. This keeps every stored row fully meaningful and makes "is it live" a join rather than a null check.
+
+**Reach for the shape the system already has before inventing one.** If credentials everywhere in the system are "identifier, hash at rest, secret shown once", a new kind of credential is that shape with a different owner — not a new `AgentKey` object with its own fields and its own rules. A bespoke object per usage is how one concept becomes five near-identical tables. Ask what this needs that the standard shape lacks; if the answer is nothing, use the standard shape.
 
 **Every object earns its keep, and a type earns its place with an invariant beyond existing.** A type per noun in the requirements is sprawl: merge or delete until everything left is load-bearing. Genuine *primitive obsession* is a concept with real rules riding around as a bare `string` — an email address, a money amount, a percentage — and those deserve a value object carrying the validation.
 
@@ -102,7 +114,13 @@ List each root's methods in the artifact. An empty method column is anemia, visi
 
 **Draw a state machine for every object with a lifecycle.** Objects that move through named states carry most of their invariants in the *transitions*, and a constructor-focused invariant column cannot express them. Enumerate the legal transitions as from / to / trigger, and say that anything unlisted is refused by the aggregate — that sentence turns the table into the invariant instead of a comment near it. Keep the state set as small as the domain actually needs; states invented for symmetry are the same failure as types invented for nouns.
 
-**Mark what was inferred rather than confirmed.** The language is crunched with the domain expert (step 2), but modeling always produces some choices nobody was asked about. List them, in the artifact, as inferred. Everything unmarked reads as settled and gets built on, and a wrong assumption that shipped with full ceremony behind it is the most expensive kind.
+**Name each object what it is.** `Call` for one request and its reply is vague; `Roundtrip` says it. A vague name survives into schema, code and conversation, and every later reader pays for it. The same applies to fields: say what a string contains and what it excludes ("the client IP, no port, no credential material"), because "source" alone will be read three ways.
+
+**An aggregate is a noun with identity and a lifecycle.** "Routing", "Recording", "Processing" are activities: they belong on an object as behavior, or they are groupings of objects, but they are not aggregates. If the candidate cannot answer "what is one of these, and when is it created and destroyed", it is not an aggregate.
+
+**Mark what was inferred rather than confirmed, and leave the gaps open.** The language is crunched with the domain expert (step 2), but modeling always produces choices nobody was asked about. List them in the artifact as open questions rather than filling them with plausible answers — a filled-in guess reads as settled and gets built on, and a wrong assumption that shipped with full ceremony behind it is the most expensive kind. "Undecided: the idle window that closes a session" is a better artifact than a confident `30m`.
+
+**The artifact carries the model, not commentary about it.** No reading-guide preamble explaining what an entity is, no catalog of words a vendor uses that we don't, no essay on rejected alternatives (those go in the ADR, one line each). We define our words; other systems define theirs. Every paragraph that is not the model itself is a paragraph the reviewer has to read past to find the model.
 
 #### Diagrams
 
@@ -124,8 +142,8 @@ Three documents, in `docs/specs/` and `docs/adr/` (or wherever the project alrea
 
 | Artifact | Template | Holds |
 |---|---|---|
-| Context map | `templates/context-map.md` | Ubiquitous language, contexts, ambiguous terms, stored vs derived |
-| Domain model | `templates/domain-model.md` | Objects, every field, ownership, relationships with cardinality, diagrams |
+| Context map | `templates/context-map.md` | Ubiquitous language, contexts (model-sized), ambiguous terms, stored vs derived, open questions |
+| Domain model | `templates/domain-model.md` | One section per object: fields, behaviors, invariants, relationships with cardinality, states |
 | ADR | `templates/adr.md` | The decisions and why, the alternatives, the consequences |
 
 They are separate because they answer different questions and change at different rates. The ADR is append-only and supersedes; the model is rewritten as it deepens. Do not inline the full object tables into the ADR — one flat table stops being readable past two contexts, and the ADR is not where structure belongs.
@@ -201,8 +219,16 @@ Order, subscription, and reporting code import `billing` only — never `billing
 | Domain object sprawl — a type per noun in the requirements | An object earns its place by making a concept explicit: invariant, identity, or a concept hiding in a primitive. Otherwise it's a field. |
 | Primitive obsession — a concept with real rules riding as a raw string | Wrap in a value object. The type carries the meaning and the validation. |
 | The opposite: a wrapper type per identifier (`OrderId`, `UserId`) | Ask what the constructor rejects. "The empty string" is not an invariant. Identifiers, version strings and opaque vendor references are primitives. |
-| Objects listed without their fields | Every field, with type, optionality and meaning. A model with no fields cannot be checked against anything. |
-| An optional field with no stated meaning for absence | Say what absent means. Otherwise two readers interpret it two ways and both write code. |
+| Objects listed without their fields | Every field, with type and meaning. A model with no fields cannot be checked against anything. |
+| An optional field with no stated meaning for absence | Say what absent means, or remove the optionality. Otherwise two readers interpret it two ways and both write code. |
+| One object's facts spread across a fields section, an ownership table and a relationships section | One section per object holding everything: fields, behaviors, invariants, relationships with cardinalities, states. A reviewer should never join three tables by hand. |
+| Optional fields in a record or audit ("absent means the upstream never answered") | Record the failure explicitly: an outcome enumeration plus the evidence. An audit with missing information is not an audit. |
+| `revokedAt` / `closedAt` / `completedAt` sitting null on live rows | The later fact gets its own object and table; absence of the row is the state. A live row carrying a field about something that has not happened is denormalized. |
+| A bespoke object for a shape the system already has (`AgentKey` beside `ApiToken` beside `Credential`) | Use the standard shape with a different owner. Ask what this needs that the standard lacks; "nothing" means don't invent. |
+| A free-text `kind` / `label` / `tag` field | Either it is a closed set the domain names, or it is not part of the model. Tags are where undesigned concepts hide. |
+| Uniqueness asserted with no reason | Say what breaks if two exist. "Name is unique" without a rule behind it is a constraint nobody can remove later. |
+| Vague object names (`Call`, `Item`, `Record`) | Name it what it is (`Roundtrip`). Vague names survive into schema, code and conversation. |
+| An activity as an aggregate (`Routing`, `Processing`) | Aggregates are nouns with identity and a lifecycle. An activity is behavior on an object, or a grouping of objects. |
 | Relationships drawn as bare arrows | Every relationship gets a kind (has-a, references, is-a, derived-from) and a cardinality (1-1, 1-n, n-1, n-n), with the lower bound when it is an invariant. |
 | Ownership left implicit | Say which root owns which objects outright and what it merely names by id. An object owned by two roots is a bug you cannot see until it is written down. |
 | A class hierarchy for what is a closed set of alternatives | Most domain is-a is a sum, not inheritance. Variants that differ only in permissions are a role field and an authorization rule. |
@@ -212,7 +238,11 @@ Order, subscription, and reporting code import `billing` only — never `billing
 | One giant aggregate so every rule is constructor-enforceable | True invariants only within one aggregate. Cross-aggregate rules go eventually consistent: commit one, emit an event, reconcile. |
 | Direct object references or multi-aggregate transactions | Reference other aggregates by ID only; modify one aggregate per transaction; events between. |
 | Context sprawl — a bounded context per team, module, or noun | A context earns its boundary with its own language and data. Sharing both → one context. |
+| Contexts sized like aggregates or responsibilities (`Recording`, `Routing`, `Access`) | Contexts are the size of Platform, Cluster, IAM. Two objects sharing every word with their neighbor are a grouping inside one context. Ask which word means something different here. |
+| Merging two contexts because they are the same subdomain | One subdomain can be several contexts. IAM in the control plane and IAM in the deployed instance are different models with no shared data; that is two contexts, deliberately. |
 | Merging contexts that speak different languages | Same word, different meaning is a seam. Split there; language outranks shared data or convenience. |
+| Meta-commentary in the artifact: reading guides, "words we don't use", vendor vocabulary comparisons | The artifact carries the model. Rejected alternatives get one line each in the ADR; other systems' words are their business. |
+| Open questions filled with plausible answers | Leave them open and named. A confident guess reads as settled and gets built on. |
 | Deep-modeling a generic subdomain | Distill first. Core gets the investment; generic gets bought, conformed to, or kept shallow. |
 | Vendor types in domain signatures | Domain interface uses domain types only. Translate in the adapter. |
 | Storing a derived value (e.g. `available`) | Store the inputs (`on_hand`, `reserved`), compute the derived value. |
@@ -237,9 +267,29 @@ Order, subscription, and reporting code import `billing` only — never `billing
 - A transaction about to touch two aggregates, or an aggregate holding a direct reference to another.
 - Growing an aggregate so a cross-aggregate rule fits in one constructor.
 - Splitting a bounded context when neither side owns distinct language or data — or merging two that speak different languages.
+- A proposed context you could describe as a responsibility rather than a model with its own vocabulary.
+- About to add a nullable `revokedAt` / `closedAt` / `deletedAt` to a live row instead of a fact table.
+- An optional field in something that records what happened.
+- About to invent an object for a credential, an audit row, or an identifier shape the system already has.
+- About to write a free-text `kind`, `label` or `tag` field.
+- About to fill an unanswered question with something plausible rather than listing it open.
+- Writing a paragraph in the artifact that explains DDD, catalogs a vendor's words, or argues with an alternative — none of that is the model.
 - "This design is too small for the ceremony" — only the user can say that.
 
 All of these mean: run the five steps and write the artifacts first.
+
+## Before you hand the artifact over
+
+A self-review pass, in the author's voice, before the reviewer's time is spent. Each question has a right answer; a wrong one is a rewrite, not a comment.
+
+1. Pick any object. Is everything about it — fields, behaviors, invariants, relationships with cardinalities, states — in its own section, with nothing to cross-reference?
+2. Is every optional field either impossible to remove, or carrying a stated meaning someone can act on? Does anything that records an event have holes in it?
+3. Does any live row carry a field about something that has not happened?
+4. Did any object get invented where a shape the system already uses would have done?
+5. Does every name say what the thing is, to someone who was not in the session?
+6. Is every context a model with its own vocabulary, not a responsibility?
+7. Is everything nobody decided listed as open, rather than filled in?
+8. Is there a paragraph in here that is not the model?
 
 ## Reference
 

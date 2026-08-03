@@ -114,6 +114,25 @@ No JSON columns for payloads. TEXT or BYTEA, because byte fidelity is the
 contract and because a JSON column is usually a normalization dodge in disguise.
 Query-relevant fields get real columns.
 
+**A nullable column meaning "this has not happened yet" is a table you have not
+written.** `revoked_at`, `closed_at`, `completed_at`, `deleted_at` sitting null
+on every live row means the row carries a field about a non-event. Give the
+fact its own table (`credential_revocations`, `session_closures`), key it by
+the thing it happened to, and derive the state from whether the row exists.
+This follows from the model's own rule and surfaces here as a schema smell
+first.
+
+**No column's meaning may depend on another column's value.** A `reason`
+populated only when `state = 'suspended'` is a conditional column: split it out
+or drop it. The test is mechanical — read each column alone and ask whether you
+can say what it means without consulting a sibling.
+
+**Nullability is a claim to defend, per column.** For every nullable column,
+say what NULL means beside it. If the answer is "we didn't have the value", the
+write path needs fixing, not the schema. Records of what happened — audit and
+event tables especially — carry no nulls: a failure is an outcome enumeration
+plus its evidence.
+
 ## The cross-check
 
 Checking the three separately misses the point. They describe one model.
@@ -161,4 +180,8 @@ Mechanical, which is the only kind that holds:
 | Authentication described once for the whole service | It is a property of the caller class, and services usually have several. |
 | Errors invented per endpoint | One closed taxonomy, defined once, chosen from. |
 | Invariants stated in the model and absent from DDL | Every invariant that can be a constraint should be one. |
+| A nullable `revoked_at` / `closed_at` / `completed_at` on the primary table | The later fact gets its own table; absence of the row is the state. |
+| A column only meaningful when a sibling holds a certain value | Conditional column. Split it out. Every column readable alone. |
+| Nullable columns with no stated meaning for NULL | Say what NULL means, or fix the write path so it cannot happen. |
+| Audit or event tables with optional columns | A failure is an outcome enumeration plus evidence. An audit with holes is not an audit. |
 | Contract written once and never revisited | Contracts iterate with the model. Record the pass number. |
