@@ -1,0 +1,9 @@
+{
+  "name": "db-schemas",
+  "version": "0.1.0",
+  "description": "Integrity-first SQL DDL. Fires whenever DDL is written or reviewed: the database generates ids and timestamps, every reference is an FK with explicit ON DELETE, a fact that happens later is its own table instead of a nullable status column, closed vocabularies are seeded enum tables, real types for time and money, NOT NULL by default with every surviving NULL explained, 5NF with recorded exceptions, every index naming the query it serves.",
+  "author": {
+    "name": "Guy J Grigsby"
+  },
+  "license": "MIT"
+}

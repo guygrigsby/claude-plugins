@@ -37,15 +37,10 @@ Templates for the context map, ADR, and ACL ship with the skill. The core workfl
 
 ## Writing DB schemas
 
-A companion skill, `writing-db-schemas`, fires whenever SQL DDL is being
-written or reviewed. Its stance: normalization is the means, integrity is the
-point — the database itself must refuse invalid states. The database generates
-ids and timestamps; every reference is an FK with explicit ON DELETE; a fact
-that happens later is its own table (no nullable `returned_at`/`deleted_at`
-status columns); closed vocabularies are seeded enum tables; NOT NULL is the
-default and every surviving NULL states its meaning; every index names the
-query it serves; rules SQL cannot express are store-enforced and recorded
-inline.
+The integrity-first DDL rules formerly shipped here as `writing-db-schemas`
+now live in the companion [db-schemas](../db-schemas/) plugin. ddd's
+`defining-contracts` skill still owns defining every table to 100% alongside
+API and event contracts; db-schemas owns how that DDL is written.
 
 ## License
 

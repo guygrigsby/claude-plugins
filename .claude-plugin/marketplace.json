@@ -12,9 +12,15 @@
       "source": "./plugins/agent-ready"
     },
     {
+      "name": "db-schemas",
+      "description": "Integrity-first SQL DDL. Fires whenever DDL is written or reviewed: the database generates ids and timestamps, every reference is an FK with explicit ON DELETE, a fact that happens later is its own table instead of a nullable status column, closed vocabularies are seeded enum tables, real types for time and money, NOT NULL by default with every surviving NULL explained, 5NF with recorded exceptions, every index naming the query it serves.",
+      "version": "0.1.0",
+      "source": "./plugins/db-schemas"
+    },
+    {
       "name": "ddd",
-      "description": "Domain-driven design and contract completeness for every design session. Subdomain distillation, model-sized bounded contexts, entity/VO/enum-classified objects each documented in one self-contained section with every field, behavior, relationship cardinality and state, optionality justified rather than assumed, later facts as their own tables instead of nullable columns, constructor-enforced invariants, aggregate discipline with domain events, anti-corruption layers, then API, domain event and DDL contracts each defined to 100% and cross-checked, captured as a context map, a domain model and an ADR before code, with integrity-first DDL rules: DB-generated ids and timestamps, ON DELETE on every FK, later facts as their own tables, enum tables for closed vocabularies.",
-      "version": "0.7.0",
+      "description": "Domain-driven design and contract completeness for every design session. Subdomain distillation, model-sized bounded contexts, entity/VO/enum-classified objects each documented in one self-contained section with every field, behavior, relationship cardinality and state, optionality justified rather than assumed, later facts as their own tables instead of nullable columns, constructor-enforced invariants, aggregate discipline with domain events, anti-corruption layers, then API, domain event and DDL contracts each defined to 100% and cross-checked, captured as a context map, a domain model and an ADR before code. Integrity-first DDL writing rules live in the companion db-schemas plugin.",
+      "version": "0.8.0",
       "source": "./plugins/ddd"
     },
     {
