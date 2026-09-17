@@ -50,7 +50,33 @@ If the corpus directory is empty for the requested register, tell the user which
 
 Produce the draft. Apply rules from `rules.md` *while writing*, not as a post-hoc cleanup. The grounding samples are for cadence and word-choice; the rules are non-negotiable.
 
-After drafting, run a self-check pass against the rules. If you catch a violation, fix it inline rather than apologizing.
+## Step 4a: Check the draft with voicelint
+
+Do not self-review the draft against the rules. A model checking its own output against fifteen rules is the exact thing that decays over a long session, which is why this check is a separate tool.
+
+Pipe the draft to `voicelint`, mapping the register:
+
+| This skill's register | voicelint register |
+| --- | --- |
+| email | `email` |
+| slack | `slack` |
+| pr-description | `pr-body` |
+| pr-comment | `pr-review` |
+| review-summary | `pr-review` |
+| blog | none, skip the check and say so |
+
+```sh
+printf '%s' "$draft" | voicelint --register pr-body --format text
+```
+
+Read the exit code:
+
+- `0`: clean, nothing to do.
+- `1`: it found something. Every finding names a rule and the line it sits on. Fix each one and run it again until it exits 0. Do not argue with a finding in your output; either fix it or, if you think it is wrong, fix it anyway and say why you disagree in one line.
+- `2`: a rule is configured to block. Same as 1, but it will not pass until fixed.
+- `3`: the tool failed or is not installed. Fall back to a manual pass against `rules.md` and say in your output that voicelint did not run.
+
+`voicelint` needs `TYPESAFE_API_KEY` to check the rules a regex cannot decide: padding, a buried lede, ornament over specifics, a manufactured closer. Without the key it still catches dashes, scaffolding, a leading "I" and attribution, and reports the rest as skipped. Both are useful; the first is the point.
 
 ## Step 5: Output format
 
@@ -59,7 +85,8 @@ Return:
 1. **Inferred register** (if it wasn't passed explicitly), one line.
 2. **The draft itself**, in a fenced block or quoted as appropriate to the register.
 3. **Sample sources used** (file path + an identifier per sample), so the user can spot-check the grounding.
-4. *Nothing else.* No "let me know if you want changes" trailer. The user will tell you what's off.
+4. **voicelint result**, one line: clean, or which rules it caught and that you fixed them. Say so plainly if it did not run.
+5. *Nothing else.* No "let me know if you want changes" trailer. The user will tell you what's off.
 
 ## When the user critiques the draft
 
